@@ -8,6 +8,8 @@ import argparse
 from matplotlib.ticker import EngFormatter
 import matplotlib.ticker as ticker
 
+from pathlib import Path
+
 DIV_LINE_WIDTH = 50
 
 
@@ -29,27 +31,7 @@ def plot_data(data, xaxis='Step', value="AvgEpRet", condition="Condition1", smoo
 
     if isinstance(data, list):
         data = pd.concat(data, ignore_index=True)
-    sns.tsplot(data=data, time=xaxis, value=value, unit="Unit", legend=True,
-               condition=condition, ci=50, ax=ax, linewidth=2.5, **kwargs)
-    """
-    If you upgrade to any version of Seaborn greater than 0.8.1, switch from
-    tsplot to lineplot replacing L29 with:
-        sns.lineplot(data=data, x=xaxis, y=value, hue=condition, ci='sd', **kwargs)
-    Changes the colorscheme and the default legend style, though.
-    """
-    # plt.rcParams["legend.frameon"] = True
-    # legend = plt.legend(loc='lower right', frameon=True, fancybox=True)
-    # legend.set_frame_on(True)
-    # legend.get_frame().set_facecolor('C0')
-    # plt.legend(loc='upper center', ncol=3, handlelength=1,
-    #           borderaxespad=0., prop={'size': 13})
-
-    """
-    For the version of the legend used in the Spinning Up benchmarking page,
-    swap L38 with:
-    plt.legend(loc='upper center', ncol=6, handlelength=1,
-               mode="expand", borderaxespad=0., prop={'size': 13})
-    """
+    sns.lineplot(data=data, x=xaxis, y=value, hue=condition, ci='sd', **kwargs)
 
     xscale = np.max(np.asarray(data[xaxis])) > 5e3
     if xscale:
@@ -79,7 +61,7 @@ Iteraion    Value   Unit    Condition
 """
 
 
-def get_datasets(logdir, legend=None, tag=None, data_file='progress.txt'):
+def get_datasets(logdir, legend=None, data_type='csv'):
     """
     Recursively look through logdir for output files produced by
     spinup.logx.Logger.
@@ -88,16 +70,12 @@ def get_datasets(logdir, legend=None, tag=None, data_file='progress.txt'):
     datasets = []
     units = dict()
     exp_idx = 0
-    for root, _, files in os.walk(logdir):
-        if ('progress.txt' in files) or ('progress.csv' in files):
+
+    logdir = Path.cwd() / logdir
+    if data_type == 'csv':
+        for files in logdir.rglob('*.csv'):
+            print(files)
             exp_name = None
-            try:
-                config_path = open(os.path.join(root, 'config.json'))
-                config = json.load(config_path)
-                if tag in config:
-                    exp_name = config[tag]
-            except:
-                print('No file named config.json')
             condition1 = legend or exp_name
             condition2 = condition1 + '-' + str(exp_idx)
             exp_idx += 1
@@ -105,17 +83,23 @@ def get_datasets(logdir, legend=None, tag=None, data_file='progress.txt'):
                 units[condition1] = 0
             unit = units[condition1]
             units[condition1] += 1
-
-            try:
-                if 'progress.txt' in files:
-                    exp_data = pd.read_table(
-                        os.path.join(root, 'progress.txt'))
-                elif 'progress.csv' in files:
-                    exp_data = pd.read_csv(os.path.join(root, 'progress.csv'))
-            except:
-                print('Could not read from %s' %
-                      os.path.join(root, data_file))
-                continue
+            exp_data = pd.read_csv(files)
+            exp_data.insert(len(exp_data.columns), 'Unit', unit)
+            exp_data.insert(len(exp_data.columns), 'Condition1', condition1)
+            exp_data.insert(len(exp_data.columns), 'Condition2', condition2)
+            datasets.append(exp_data)
+    elif data_type == 'txt':
+        for files in logdir.rglob('*.txt'):
+            print(files)
+            exp_name = None
+            condition1 = legend or exp_name
+            condition2 = condition1 + '-' + str(exp_idx)
+            exp_idx += 1
+            if condition1 not in units:
+                units[condition1] = 0
+            unit = units[condition1]
+            units[condition1] += 1
+            exp_data = pd.read_table(files)
             exp_data.insert(len(exp_data.columns), 'Unit', unit)
             exp_data.insert(len(exp_data.columns), 'Condition1', condition1)
             exp_data.insert(len(exp_data.columns), 'Condition2', condition2)
@@ -142,7 +126,7 @@ def main(args):
     if args.legend:
         for logdir, legend in zip(logdirs, args.legend):
             datasets, units, cond = get_datasets(
-                logdir=logdir, legend=legend, tag=args.tag, data_file=args.file)
+                logdir=logdir, legend=legend)
             data += datasets
             print(f'{logdir} -> {cond}, {units[cond]}')
     else:
@@ -156,12 +140,14 @@ def main(args):
     print('Plotting...')
 
     sns.set(style="darkgrid", font_scale=1.8)
+    sns.set_palette('husl', 8, .75)
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6.4*1.5, 4.8*1.5))
+    plt.title(args.name)
     condition = 'Condition2' if args.count else 'Condition1'
-    plot_data(data, xaxis=args.xaxis, value=args.value, condition=condition,
-              smooth=args.smooth, ax=ax)
+    plot_data(data, xaxis=args.xaxis, value=args.value, condition=condition, smooth=args.smooth, ax=ax)
+
     ax.set_xlabel('Steps(M)', labelpad=10)
-    ax.set_ylabel('Average Performance', labelpad=10)
+    ax.set_ylabel('Reward', labelpad=10)
     def mappingx(x, pos): 
         return (x / 1e6)
     # ax.xaxis.set_major_formatter(ticker.EngFormatter())

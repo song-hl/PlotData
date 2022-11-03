@@ -125,7 +125,7 @@ def main(args):
     colors = ['gray', 'green', 'red', 'blue']
     version = 'v2'
 
-    nsize = (2, 5)
+    nsize = (2, 5)  # plot size
 
     sns.set(style="darkgrid", palette="deep", font_scale=1.5)
     fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1],

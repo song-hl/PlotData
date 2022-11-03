@@ -4,7 +4,7 @@ api = wandb.Api()
 from pathlib import Path
 def main(class_args):
     # Project is specified by <entity/project-name>
-    project = "hlsong/maskagent"
+    project = "hlsong/compare"
     runs = api.runs(project)
     summary_list = []
     config_list = []
@@ -33,12 +33,14 @@ def main(class_args):
                 elif env_name == 'mujoco':
                     map_name = f"{map_name}-{run.config['agent_conf']}"
                     dir_name = Path.cwd() / project / env_name / map_name / algo_name
+                    metrics_dataframe.rename(columns={'faulty_node_-1/eval_average_episode_rewards': 'eval_average_episode_rewards'}, inplace=True)
+                    metrics_dataframe = metrics_dataframe.dropna(axis=0, how='any', subset=['eval_average_episode_rewards'])
             if class_args is not None and algo_name == "mask":
                 for class_arg in class_args:
                     if class_arg in run.config:
                         dir_name = dir_name / f"{class_arg}-{run.config[class_arg]}"
-            seed = run.name.split('_')[-2][4:]
-            dir_name = dir_name / f"seed-{seed}"
+            # seed = run.name.split('_')[-2][4:]
+            # dir_name = dir_name / f"seed-{seed}"
             Path.mkdir(dir_name, parents=True, exist_ok=True)
             file_name = dir_name / f"{run.name}.csv"
             metrics_dataframe.to_csv(file_name)
@@ -53,4 +55,6 @@ def main(class_args):
 
 
 if __name__ == "__main__":
-    main(['num_mini_batch','forward_method','maska_bsz','use_W'])
+    # class_arg = ['num_mini_batch', 'forward_method', 'maska_bsz', 'use_W']
+    class_arg = None
+    main(class_arg)
