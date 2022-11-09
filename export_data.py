@@ -2,9 +2,11 @@ import pandas as pd
 import wandb
 api = wandb.Api()
 from pathlib import Path
-def main(class_args):
+
+
+def main(class_args, project):
     # Project is specified by <entity/project-name>
-    project = "hlsong/compare"
+    project = "hlsong/drone_leader"
     runs = api.runs(project)
     summary_list = []
     config_list = []
@@ -56,5 +58,6 @@ def main(class_args):
 
 if __name__ == "__main__":
     # class_arg = ['num_mini_batch', 'forward_method', 'maska_bsz', 'use_W']
-    class_arg = None
-    main(class_arg)
+    class_arg = ['num_mini_batch']
+    project_arg = None
+    main(class_arg, project_arg)

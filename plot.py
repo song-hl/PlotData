@@ -7,11 +7,11 @@ import numpy as np
 import argparse
 from matplotlib.ticker import EngFormatter
 import matplotlib.ticker as ticker
-
+import matplotlib as mpl
 from pathlib import Path
 
 DIV_LINE_WIDTH = 50
-
+mpl.rcParams["axes.unicode_minus"] = False
 
 def plot_data(data, xaxis='Step', value="AvgEpRet", condition="Condition1", smooth=1, ax=None, **kwargs):
     if smooth > 1:
@@ -39,26 +39,6 @@ def plot_data(data, xaxis='Step', value="AvgEpRet", condition="Condition1", smoo
         plt.ticklabel_format(style='sci', axis='x', scilimits=(0, 0))
 
     plt.tight_layout(pad=0.5)
-
-
-"""
-Iteraion    Value   Unit    Condition
-..          ..      0       dqn
-..          ..      1       dqn
-..          ..      2       dqn
-..          ..      3       dqn
-..          ..      4       dqn
-..          ..      0       ddqn
-..          ..      1       ddqn
-..          ..      2       ddqn
-..          ..      3       ddqn
-..          ..      4       ddqn
-..          ..      0       duel
-..          ..      1       duel
-..          ..      2       duel
-..          ..      3       duel
-..          ..      4       duel
-"""
 
 
 def get_datasets(logdir, legend=None, data_type='csv'):
@@ -139,7 +119,7 @@ def main(args):
     print('\n' + '='*DIV_LINE_WIDTH)
     print('Plotting...')
 
-    sns.set(style="darkgrid", font_scale=1.8)
+    sns.set(style="darkgrid", font_scale=1.8,font="Tlwg Mono",color_codes=True,)
     sns.set_palette('husl', 8, .75)
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6.4*1.5, 4.8*1.5))
     plt.title(args.name)
