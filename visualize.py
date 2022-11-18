@@ -9,100 +9,6 @@ import matplotlib as mpl
 from matplotlib.pyplot import MultipleLocator
 api = wandb.Api(timeout=19)
 mpl.rcParams["axes.unicode_minus"] = False
-DroneEnv = {
-    "Flock-4xagent": {
-        # "MAJOR": [
-        #     "fmxfranky/iclr22-drone-experiments/runs/1zgungx5",
-        #     "fmxfranky/iclr22-drone-experiments/runs/2lvz9avu",
-        #     "fmxfranky/iclr22-drone-experiments/runs/2hpj5s5o",
-        #     "fmxfranky/iclr22-drone-experiments/runs/2jt2dh29",
-        #     "fmxfranky/iclr22-drone-experiments/runs/3ln8i0k7",
-        # ],
-        "MAT": [
-            "hlsong/drone_flock/6f515t5e",
-            "hlsong/drone_flock/49dki36q",
-            "hlsong/drone_flock/tbabd3ph",
-            "hlsong/drone_flock/zqt3wabq",
-            "hlsong/drone_flock/9pz6r54v",
-            "hlsong/drone_flock/lhwte7je",
-        ],
-        "MASK_AGENT": [
-            "hlsong/drone_flock/34l4scr8",
-            "hlsong/drone_flock/7m83f190",
-            "hlsong/drone_flock/ssm6oaoy",
-            "hlsong/drone_flock/2yebjpm7",
-        ],
-        "MASK_AGENT_pro": [
-            "hlsong/drone_flock/0sozqzjq",
-            "hlsong/drone_flock/uhflgrpf",
-            "hlsong/drone_flock/shit0ewx",
-            "hlsong/drone_flock/h7ivvza2",
-            "hlsong/drone_flock/4j1wcvho",
-        ],
-        # "HAPPO": [
-        #     "fmxfranky/iclr22-drone-experiments/runs/26uq48wn",
-        #     "fmxfranky/iclr22-drone-experiments/runs/2wzkf1b6",
-        #     "fmxfranky/iclr22-drone-experiments/runs/3bdl5c6r",
-        #     "fmxfranky/iclr22-drone-experiments/runs/3n7ighr7",
-        #     "fmxfranky/iclr22-drone-experiments/runs/2w7h5m4m",
-        # ],
-        # "MAPPO": [
-        #     "fmxfranky/iclr22-drone-experiments/runs/3jehsypw",
-        #     "fmxfranky/iclr22-drone-experiments/runs/1hjupjzo",
-        #     "fmxfranky/iclr22-drone-experiments/runs/av98mdws",
-        #     "fmxfranky/iclr22-drone-experiments/runs/10haayxs",
-        #     "fmxfranky/iclr22-drone-experiments/runs/2sfaww43",
-        # ],
-    },
-    "LeaderFollower-4xagent": {
-        "MAT": [
-            "hlsong/drone_flock/6f515t5e",
-            "hlsong/drone_flock/49dki36q",
-            "hlsong/drone_flock/tbabd3ph",
-            "hlsong/drone_flock/zqt3wabq",
-            "hlsong/drone_flock/9pz6r54v",
-            "hlsong/drone_flock/lhwte7je",
-        ],
-        "MASK_AGENT": [
-            "hlsong/drone_flock/34l4scr8",
-            "hlsong/drone_flock/7m83f190",
-            "hlsong/drone_flock/ssm6oaoy",
-            "hlsong/drone_flock/2yebjpm7",
-        ],
-        "MASK_AGENT_pro": [
-            "hlsong/drone_flock/0sozqzjq",
-            "hlsong/drone_flock/uhflgrpf",
-            "hlsong/drone_flock/shit0ewx",
-            "hlsong/drone_flock/h7ivvza2",
-            "hlsong/drone_flock/4j1wcvho",
-        ],
-    },
-    "Meetup-4xagent": {
-        "MAT": [
-            "hlsong/drone_flock/6f515t5e",
-            "hlsong/drone_flock/49dki36q",
-            "hlsong/drone_flock/tbabd3ph",
-            "hlsong/drone_flock/zqt3wabq",
-            "hlsong/drone_flock/9pz6r54v",
-            "hlsong/drone_flock/lhwte7je",
-        ],
-        "MASK_AGENT": [
-            "hlsong/drone_flock/34l4scr8",
-            "hlsong/drone_flock/7m83f190",
-            "hlsong/drone_flock/ssm6oaoy",
-            "hlsong/drone_flock/2yebjpm7",
-        ],
-        "MASK_AGENT_pro": [
-            "hlsong/drone_flock/0sozqzjq",
-            "hlsong/drone_flock/uhflgrpf",
-            "hlsong/drone_flock/shit0ewx",
-            "hlsong/drone_flock/h7ivvza2",
-            "hlsong/drone_flock/4j1wcvho",
-        ],
-    },
-}
-env_list = {"drone": DroneEnv}
-
 
 def export_run_name():
     project = "hlsong/drone_flock"
@@ -163,11 +69,7 @@ def get_df_from_wandb(env, scenario, store=True, save_path='./', smooth=1, smoot
                 save_path = Path(save_path) if Path(save_path).is_absolute() else Path.cwd() / save_path
                 env_name = run.config['env_name']
                 if env_name is not None:
-                    if env_name == 'drone':
-                        dir_name = save_path / env_name / scenario / algo
-                    elif env_name == 'mujoco':
-                        scenario = f"{scenario}-{run.config['agent_conf']}"
-                        dir_name = save_path / env_name / scenario / algo
+                    dir_name = save_path / env_name / scenario / algo
                 Path.mkdir(dir_name, parents=True, exist_ok=True)
                 file_name = dir_name / f"{run.name}.csv"
                 history.to_csv(file_name)
@@ -324,55 +226,3 @@ def plot_multi_scenario(env_name, scenarioes, nsize, save=False, save_path='./pl
         file_name = path / f"{env_name}.pdf"
         plt.savefig(file_name)
     # plt.show()
-
-
-store = True
-save_path = './data'
-step_lenth = None
-smooth = 3
-smooth_method = 2
-from_wandb = True
-save_plot = False
-plot_path = './plot_result'
-# TAG plot one MAP in one ENV to one IMAGE
-env_name = 'drone'
-env = env_list[env_name]
-scenarios = [key for key in env.keys()]
-print(scenarios)
-scenario = scenarios[0]
-print(f"env: {env_name}")
-if from_wandb:
-    df, indicator = get_df_from_wandb(env, scenario, store, save_path, smooth, smooth_method, step_lenth)
-else:
-    df, indicator = get_df_from_local(env_name, scenario, save_path, smooth, smooth_method, step_lenth)
-plot_one_scenario(df, indicator, env_name, scenario, save_plot, plot_path)
-# TAG plot Multi MAPs in one ENV to Multi IMAGEs
-env_name = "drone"
-env = env_list[env_name]
-scenarios = [key for key in env.keys()]
-
-for scenario in scenarios:
-    print(f"env: {env_name}")
-    if from_wandb:
-        df, indicator = get_df_from_wandb(env, scenario, store, save_path, smooth, smooth_method, step_lenth)
-    else:
-        df, indicator = get_df_from_local(env_name, scenario, save_path, smooth, smooth_method, step_lenth)
-    plot_one_scenario(df, indicator, env_name, scenario, save_plot, plot_path)
-# TAG plot Multi MAPs in one ENV to one IMAGEs
-env_name = "drone"
-env = env_list[env_name]
-scenarios = [key for key in env.keys()]
-dfargs = {
-    "env_name": env_name,
-    "env": env,
-    "scenarios": scenarios,
-    "store": store,
-    "save_path": save_path,
-    "step_lenth": step_lenth,
-    "smooth": smooth,
-    "smooth_method": smooth_method,
-    "from_wandb": from_wandb,
-}
-print(f"env: {env_name}")
-nsize = (1, 3)
-plot_multi_scenario(env_name, scenarios, nsize, save_plot, plot_path, dfargs)
