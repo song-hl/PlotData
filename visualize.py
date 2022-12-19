@@ -57,7 +57,8 @@ def get_df_from_wandb(env, scenario, store=True, save_path='./', smooth=1, smoot
                 metric_key = "eval_average_episode_scores"
             else:
                 metric_key = "eval_win_rate"
-            history = run.history().dropna()[["_step", metric_key]]
+            # history1 = run.scan_history(keys=["_step", metric_key])
+            history = run.history(samples=2000).dropna()[["_step", metric_key]]
             history["algorithm"] = algo
             history["seed"] = config["seed"]
             history["Environment steps"] = history["_step"]
@@ -85,7 +86,6 @@ def get_df_from_wandb(env, scenario, store=True, save_path='./', smooth=1, smoot
                 z = np.ones(len(x))
                 smoothed_x = np.convolve(x, y, 'same') / np.convolve(z, y, 'same')
                 history["Smooth_Reward"] = smoothed_x
-                history["Smooth_Reward2"] = history["Reward"].rolling(smooth, min_periods=1).mean()
                 indicator = "Smooth_Reward"
         data = pd.concat(curve_list)
         data.reset_index(drop=True, inplace=True)
@@ -145,9 +145,10 @@ def plot_one_scenario(df, indicator, env_name, scenario, save=False, save_path='
         color_codes=True,
     )
     colors = [
-        sns.color_palette("husl", 9)[0],
-        sns.color_palette("husl", 9)[6],
-        sns.color_palette("husl", 9)[7],
+        sns.color_palette("husl", 9)[0],  # SOTA
+        # sns.color_palette("husl", 9)[7],
+        sns.color_palette("husl", 9)[6],  # MAPPO / MAT (baseline)
+        # sns.color_palette("husl", 9)[7],
         # sns.color_palette("husl", 9)[5],
     ]
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 10))
