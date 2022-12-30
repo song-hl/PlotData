@@ -5,10 +5,12 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-
+from datetime import datetime
 from matplotlib.pyplot import MultipleLocator
+from math import ceil
 api = wandb.Api(timeout=19)
 mpl.rcParams["axes.unicode_minus"] = False
+
 
 def export_run_name():
     project = "hlsong/drone_flock"
@@ -35,45 +37,67 @@ def export_run_name():
     all_df.to_csv(project_config)
 
 
-def get_df_from_wandb(env, scenario, store=True, save_path='./', smooth=1, smooth_method=2, step_lenth=None):
+def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='./', smooth=1, smooth_method=2, step_lenth=None):
     df_list = []
     # print(f" - scenario:{scenario}")
+    # 读取本地数据列表
+    file_log_name = 'file_list.txt'
+    file_log_path = Path(save_path) / env_name / scenario / file_log_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name / scenario / file_log_name
+    file_list = {}
+    if file_log_path.exists():
+        with open(file_log_path, 'r') as f:
+            for line in f.readlines():
+                wdrun_id = line.strip('\n').split('\t')[0]
+                wdrun_name = line.strip('\n').split('\t')[1]
+                file_list[wdrun_id] = wdrun_name
+    else:
+        file_list = {}
+
     for algo in env[scenario].keys():
         # print(f"  -- algo:{algo}")
+        if algo not in Algo_set:
+            continue
         curve_list = []
         for run_name in env[scenario][algo]:
-            run = api.run(run_name)
-            config = {k: v for k, v in run.config.items() if not k.startswith("_")}
-            # print(f"   --- {run.name}")
-            if config["env_name"] == "mujoco":
-                metric_key = (
-                    "eval_average_episode_rewards"
-                    if algo == "HAPPO"
-                    else "faulty_node_-1/eval_average_episode_rewards"
-                )
-            elif config["env_name"] == "drone":
-                metric_key = "eval_average_episode_rewards"
-            elif config["env_name"] == "football":
-                metric_key = "eval_average_episode_scores"
+            # 判断本地是否有数据文件
+            if run_name in file_list.keys():
+                data_path = file_list[run_name]
+                history = pd.read_csv(data_path)
+                metric_key = "Reward"
             else:
-                metric_key = "eval_win_rate"
-            # history1 = run.scan_history(keys=["_step", metric_key])
-            history = run.history(samples=2000).dropna()[["_step", metric_key]]
-            history["algorithm"] = algo
-            history["seed"] = config["seed"]
-            history["Environment steps"] = history["_step"]
-            history["Reward"] = history[metric_key]
-            indicator = "Reward"
-            curve_list.append(history)
-            # store the data
-            if store == True:
-                save_path = Path(save_path) if Path(save_path).is_absolute() else Path.cwd() / save_path
-                env_name = run.config['env_name']
-                if env_name is not None:
-                    dir_name = save_path / env_name / scenario / algo
-                Path.mkdir(dir_name, parents=True, exist_ok=True)
-                file_name = dir_name / f"{run.name}.csv"
-                history.to_csv(file_name)
+                run = api.run(run_name)
+                config = {k: v for k, v in run.config.items() if not k.startswith("_")}
+                # print(f"   --- {run.name}")
+                if config["env_name"] == "mujoco":
+                    metric_key = (
+                        "eval_average_episode_rewards"
+                        if algo == "HAPPO"
+                        else "faulty_node_-1/eval_average_episode_rewards"
+                    )
+                elif config["env_name"] == "drone":
+                    metric_key = "eval_average_episode_rewards"
+                elif config["env_name"] == "football":
+                    metric_key = "eval_average_episode_scores"
+                else:
+                    metric_key = "eval_win_rate"
+                # history1 = run.scan_history(keys=["_step", metric_key])
+                history = run.history(samples=2000).dropna()[["_step", metric_key]]
+                history["algorithm"] = algo
+                history["seed"] = config["seed"]
+                history["Environment steps"] = history["_step"]
+                history["Reward"] = history[metric_key]
+                indicator = "Reward"
+                # store the data
+                if store == True:
+                    save_path = Path(save_path) if Path(save_path).is_absolute() else Path.cwd() / save_path
+                    env_name = run.config['env_name']
+                    if env_name is not None:
+                        dir_name = save_path / env_name / scenario / algo
+                    Path.mkdir(dir_name, parents=True, exist_ok=True)
+                    file_name = dir_name / f"{run.name}.csv"
+                    history.to_csv(file_name)
+                    with open(file_log_path, 'a') as f:
+                        f.write(run_name + '\t' + str(file_name) + '\n')
 
             # smooth the data
             if smooth_method == 1 and smooth > 1:
@@ -87,6 +111,7 @@ def get_df_from_wandb(env, scenario, store=True, save_path='./', smooth=1, smoot
                 smoothed_x = np.convolve(x, y, 'same') / np.convolve(z, y, 'same')
                 history["Smooth_Reward"] = smoothed_x
                 indicator = "Smooth_Reward"
+            curve_list.append(history)
         data = pd.concat(curve_list)
         data.reset_index(drop=True, inplace=True)
         df_list.append(data)
@@ -136,7 +161,7 @@ def get_df_from_local(env_name, scenario, data_path, smooth=1, smooth_method=2, 
     return df, indicator
 
 
-def plot_one_scenario(df, indicator, env_name, scenario, save=False, save_path='./plot_result'):
+def plot_one_scenario(df, indicator, env_name, scenario, colors, smooth=1, save=False, save_path='./plot_result'):
     sns.set_theme(
         style="darkgrid",
         font_scale=2,
@@ -144,17 +169,10 @@ def plot_one_scenario(df, indicator, env_name, scenario, save=False, save_path='
         # font="Tlwg Mono",
         color_codes=True,
     )
-    colors = [
-        sns.color_palette("husl", 9)[0],  # SOTA
-        # sns.color_palette("husl", 9)[7],
-        sns.color_palette("husl", 9)[6],  # MAPPO / MAT (baseline)
-        # sns.color_palette("husl", 9)[7],
-        # sns.color_palette("husl", 9)[5],
-    ]
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 10))
     ax.set_title(scenario, fontsize=25)
     sns.lineplot(
-        data=df, x="Environment steps", y=indicator, hue="algorithm", palette=colors, ax=ax
+        data=df, x="Environment steps", y=indicator, hue="algorithm", palette=colors, ax=ax, errorbar='sd'
     )
     ax.set_xlabel("Environment steps", labelpad=10)
     ax.set_ylabel("Reward", labelpad=10)
@@ -168,13 +186,14 @@ def plot_one_scenario(df, indicator, env_name, scenario, save=False, save_path='
     if save == True:
         path = Path(save_path) / env_name / scenario if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name / scenario
         path.mkdir(parents=True, exist_ok=True)
-        file_name = path / f"{env_name}-{scenario}.pdf"
+        time_now = datetime.now().strftime("%m-%d-%H-%M-%S")
+        file_name = path / f"{env_name}-{scenario}-sm{smooth}-{time_now}.pdf"
         plt.savefig(file_name)
     # plt.show()
 
 
-def plot_multi_scenario(env_name, scenarioes, nsize, save=False, save_path='./plot_result', dfargs=None):
-    assert nsize[0] * nsize[1] == len(scenarioes)
+def plot_multi_scenario(df_list, indicator_list, env_name, scenarioes, colors, nsize, smooth=1, save=False, save_path='./plot_result'):
+    assert nsize[0] * nsize[1] <= len(scenarioes)
     sns.set_theme(
         style="darkgrid",
         font_scale=2,
@@ -182,20 +201,10 @@ def plot_multi_scenario(env_name, scenarioes, nsize, save=False, save_path='./pl
         # font="Tlwg Mono",
         color_codes=True,
     )
-    colors = [
-        sns.color_palette("husl", 9)[0],
-        sns.color_palette("husl", 9)[6],
-        sns.color_palette("husl", 9)[7],
-        # sns.color_palette("husl", 9)[5],
-    ]
     fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(14*nsize[1], 10*nsize[0]*1.1))
 
-    for i in range(len(scenarioes)):
+    for i, df, indicator in zip(range(len(scenarioes)), df_list, indicator_list):
         scenario = scenarioes[i]
-        if dfargs["from_wandb"]:
-            df, indicator = get_df_from_wandb(dfargs["env"], scenario, dfargs["store"], dfargs["save_path"], dfargs["smooth"], dfargs["smooth_method"], dfargs["step_lenth"])
-        else:
-            df, indicator = get_df_from_local(env_name, scenario, dfargs["save_path"], dfargs["smooth"], dfargs["smooth_method"], dfargs["step_lenth"])
 
         if len(axis.shape) > 1:
             ax = axis[i // nsize[1], i % nsize[1]]
@@ -203,7 +212,7 @@ def plot_multi_scenario(env_name, scenarioes, nsize, save=False, save_path='./pl
             ax = axis[i]
         ax.set_title(scenario, fontsize=25)
         sns.lineplot(
-            data=df, x="Environment steps", y=indicator, hue="algorithm", palette=colors, ax=ax
+            data=df, x="Environment steps", y=indicator, hue="algorithm", palette=colors, ax=ax, errorbar='sd'
         )
         ax.set_xlabel('')
         ax.set_ylabel('')
@@ -224,6 +233,65 @@ def plot_multi_scenario(env_name, scenarioes, nsize, save=False, save_path='./pl
     if save == True:
         path = Path(save_path) / env_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name
         path.mkdir(parents=True, exist_ok=True)
-        file_name = path / f"{env_name}.pdf"
+        time_now = datetime.now().strftime("%m-%d-%H-%M-%S")
+        file_name = path / f"{env_name}-sm{smooth}-{time_now}.pdf"
         plt.savefig(file_name)
     # plt.show()
+
+
+if __name__ == "__main__":
+    store = True
+    save_path = './data'
+    step_lenth = None
+    smooth = 3
+    smooth_method = 2
+    save_plot = True
+    plot_path = './plot_result'
+
+    from add_enlist import envlist as ENVLISTa
+    env_list = ENVLISTa()
+    env_name = "StarCraft2"
+    env = env_list[env_name]
+    scenarios = [key for key in env.keys()]
+    FLAG_NUM = 3
+
+    # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr', 'MAT', 'MAT_pma', 'MAT_jpr']
+    # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr']
+    Algo_set = ['MAT', 'MAT_pma', 'MAT_jpr']
+
+    if len(Algo_set) == 3:
+        colors = [
+            sns.color_palette("husl", 9)[0],
+            sns.color_palette("husl", 9)[6],
+            sns.color_palette("husl", 9)[7],
+        ]
+    elif len(Algo_set) == 6:
+        colors = [
+            sns.color_palette("husl", 9)[0],  # SOTA
+            sns.color_palette("husl", 9)[1],
+            sns.color_palette("husl", 9)[6],  # MAPPO / MAT (baseline)
+            sns.color_palette("husl", 9)[7],
+            sns.color_palette("husl", 9)[5],
+            sns.color_palette("husl", 9)[3],
+        ]
+
+    if FLAG_NUM == 1:
+        scenario = scenarios[0]
+        print(f"env: {env_name}")
+        df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+        plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
+    if FLAG_NUM == 2:
+        for scenario in scenarios:
+            print(f"env: {scenario}")
+            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+            plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
+    if FLAG_NUM == 3:
+        df_list = []
+        indicator_list = []
+        for scenario in scenarios:
+            print(f"env: {scenario}")
+            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+            df_list.append(df)
+            indicator_list.append(indicator)
+        nsize = (ceil(len(scenarios) / 3), 3)
+        plot_multi_scenario(df_list, indicator_list, env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)

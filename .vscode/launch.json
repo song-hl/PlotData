@@ -32,5 +32,17 @@
                 "test"
             ]
         },
+        {
+            "name": "plotmy",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/visualize.py",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "console": "integratedTerminal",
+            "justMyCode": true,
+        },
     ]
 }

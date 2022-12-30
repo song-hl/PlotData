@@ -45,7 +45,7 @@ def envlist():
         #         "hlsong/mujoco_ant_8x1/qv957j41",
         #     ],
         # },
-        "Walker-6x1-obsk=1": {  
+        "Walker-6x1-obsk=1": {
             "MAPPO_MaskAgengt": [  # zero
                 "hlsong/mujoco_walker-6x1/f0t6sbl3",
                 "hlsong/mujoco_walker-6x1/fizkvhkl",
@@ -183,7 +183,139 @@ def envlist():
             ],
         },
     }
-    env_list = {"mujoco": MujocoEnv}
+    SMACEnv = {
+        "3s_vs_5z": {
+            "MAT_pma": [
+                "hlsong/SMAC_3s_vs_5z/qyct2efu",
+                "hlsong/SMAC_3s_vs_5z/36pmh8ey",
+                "hlsong/SMAC_3s_vs_5z/pn7qbmdm",
+                "hlsong/SMAC_3s_vs_5z/w0idto6c",
+                "hlsong/SMAC_3s_vs_5z/xw68btg8",
+            ],
+            "MAT_jpr": [
+                "hlsong/SMAC_3s_vs_5z/hik9xqm8",
+                "hlsong/SMAC_3s_vs_5z/11f23wkw",
+                "hlsong/SMAC_3s_vs_5z/9idpu8tp",
+            ],
+            "MAT": [
+                "hlsong/SMAC_3s_vs_5z/c9dko9qd",
+                "hlsong/SMAC_3s_vs_5z/627s3vqi",
+                "hlsong/SMAC_3s_vs_5z/a29fcu5e",
+                "hlsong/SMAC_3s_vs_5z/74mmbxa8",
+            ],
+            "MAPPO_pma": [
+                "hlsong/SMAC_3s_vs_5z/r5ivcjfe",
+                "hlsong/SMAC_3s_vs_5z/0y0i9f4s",
+                "hlsong/SMAC_3s_vs_5z/lvy01wll",
+                "hlsong/SMAC_3s_vs_5z/jx9k6xcp",
+            ],
+            "MAPPO_jpr": [
+                "hlsong/SMAC_3s_vs_5z/9ojx6178",
+                "hlsong/SMAC_3s_vs_5z/3lhbogd8",
+                "hlsong/SMAC_3s_vs_5z/yquw1f6f",
+                "hlsong/SMAC_3s_vs_5z/3378ijsb",
+                "hlsong/SMAC_3s_vs_5z/j8xu7auv",
+                "hlsong/SMAC_3s_vs_5z/ikbi4ch3",
+            ],
+            "MAPPO": [
+                "hlsong/SMAC_3s_vs_5z/59ndduec",
+                "hlsong/SMAC_3s_vs_5z/k4j86761",
+                "hlsong/SMAC_3s_vs_5z/u78prr79",
+                "hlsong/SMAC_3s_vs_5z/w9vrqjf2",
+                "hlsong/SMAC_3s_vs_5z/hzzpribt",
+            ],
+        },
+        "mmm": {
+            "MAT_pma": [
+                "hlsong/SMAC_mmm/xv3u5rlz",
+                "hlsong/SMAC_mmm/01i9mjbz",
+                "hlsong/SMAC_mmm/6pbnyewy",
+                "hlsong/SMAC_mmm/4ko7i25c",
+                "hlsong/SMAC_mmm/keabdwo7",
+                "hlsong/SMAC_mmm/jaxl3gd1",
+            ],
+            "MAT_jpr": [
+                "hlsong/SMAC_mmm/er8naai4",
+                "hlsong/SMAC_mmm/8dl9dyb4",
+                "hlsong/SMAC_mmm/ri8qdp2n",
+                "hlsong/SMAC_mmm/z7wfa6z9",
+                "hlsong/SMAC_mmm/v4vdbn1a",
+            ],
+            "MAT": [
+                "hlsong/SMAC_mmm/s887qbu3",
+                "hlsong/SMAC_mmm/xd7mw701",
+                "hlsong/SMAC_mmm/349vdxnl",
+                "hlsong/SMAC_mmm/us3oflk5",
+            ],
+            "MAPPO_pma": [
+                "hlsong/SMAC_mmm/wj53005z",
+                "hlsong/SMAC_mmm/qnvkuxzc",
+                "hlsong/SMAC_mmm/wpp5nxal",
+                "hlsong/SMAC_mmm/dn6xf1az",
+                "hlsong/SMAC_mmm/fx3bdybb",
+            ],
+            "MAPPO_jpr": [
+                "hlsong/SMAC_mmm/xk8jv9da",
+                "hlsong/SMAC_mmm/3ednpk1c",
+                "hlsong/SMAC_mmm/11x4eqza",
+                "hlsong/SMAC_mmm/ckqcujkq",
+                "hlsong/SMAC_mmm/jwktx2ju",
+            ],
+            "MAPPO": [
+                "hlsong/SMAC_mmm/inifsd94",
+                "hlsong/SMAC_mmm/vlpmdrng",
+                "hlsong/SMAC_mmm/bfxdoj32",
+                "hlsong/SMAC_mmm/mqbx3jd6",
+                "hlsong/SMAC_mmm/zrs9hem2",
+            ],
+        },
+        "3s5z": {
+            "MAT_pma": [
+                "hlsong/SMAC_3s5z/owuh2a4v",
+                "hlsong/SMAC_3s5z/mvj88nxq",
+                "hlsong/SMAC_3s5z/ow2ytulu",
+                "hlsong/SMAC_3s5z/gdbi6pvr",
+                "hlsong/SMAC_3s5z/xlyoey3s",
+            ],
+            "MAT_jpr": [
+                "hlsong/SMAC_3s5z/1mcij0rg",
+                "hlsong/SMAC_3s5z/lb6f30ir",
+                "hlsong/SMAC_3s5z/pcrlzavz",
+                "hlsong/SMAC_3s5z/lf24yhlc",
+                "hlsong/SMAC_3s5z/rnviip0r",
+            ],
+            "MAT": [
+                "hlsong/SMAC_3s5z/gr4853f9",
+                "hlsong/SMAC_3s5z/jozzqiub",
+                "hlsong/SMAC_3s5z/9ufgh6x2",
+                "hlsong/SMAC_3s5z/up22enyj",
+                "hlsong/SMAC_3s5z/1mx1wbpi",
+                "hlsong/SMAC_3s5z/jfqdzeil",
+            ],
+            "MAPPO_pma": [
+                "hlsong/SMAC_3s5z/0hdbpfzj",
+                "hlsong/SMAC_3s5z/bm878ffh",
+                "hlsong/SMAC_3s5z/fyug206u",
+                "hlsong/SMAC_3s5z/s0fmnwzu",
+                "hlsong/SMAC_3s5z/1vp7rebt",
+                "hlsong/SMAC_3s5z/310cpa5l",
+                "hlsong/SMAC_3s5z/ycpkq1cd",
+            ],
+            "MAPPO_jpr": [
+                "hlsong/SMAC_3s5z/my0desi6",
+                "hlsong/SMAC_3s5z/bgwxf8nf",
+                "hlsong/SMAC_3s5z/fu2a3sme",
+            ],
+            "MAPPO": [
+                "hlsong/SMAC_3s5z/3mlje0my",
+                "hlsong/SMAC_3s5z/jywwojyb",
+                "hlsong/SMAC_3s5z/68os40nd",
+                "hlsong/SMAC_3s5z/8gsky889",
+                "hlsong/SMAC_3s5z/k4llsimf",
+            ],
+        },
+    }
+    env_list = {"mujoco": MujocoEnv, "StarCraft2": SMACEnv}
     return env_list
 
 

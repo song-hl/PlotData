@@ -1,0 +1,41 @@
+		"3s_vs_5z": {
+			"MAT_pma": [
+				"hlsong/SMAC_3s_vs_5z/qyct2efu",
+				"hlsong/SMAC_3s_vs_5z/36pmh8ey",
+				"hlsong/SMAC_3s_vs_5z/pn7qbmdm",
+				"hlsong/SMAC_3s_vs_5z/w0idto6c",
+				"hlsong/SMAC_3s_vs_5z/xw68btg8",
+			],
+			"MAT_jpr": [
+				"hlsong/SMAC_3s_vs_5z/hik9xqm8",
+				"hlsong/SMAC_3s_vs_5z/11f23wkw",
+				"hlsong/SMAC_3s_vs_5z/9idpu8tp",
+			],
+			"MAT": [
+				"hlsong/SMAC_3s_vs_5z/c9dko9qd",
+				"hlsong/SMAC_3s_vs_5z/627s3vqi",
+				"hlsong/SMAC_3s_vs_5z/a29fcu5e",
+				"hlsong/SMAC_3s_vs_5z/74mmbxa8",
+			],
+			"MAPPO_pma": [
+				"hlsong/SMAC_3s_vs_5z/r5ivcjfe",
+				"hlsong/SMAC_3s_vs_5z/0y0i9f4s",
+				"hlsong/SMAC_3s_vs_5z/lvy01wll",
+				"hlsong/SMAC_3s_vs_5z/jx9k6xcp",
+			],
+			"MAPPO_jpr": [
+				"hlsong/SMAC_3s_vs_5z/9ojx6178",
+				"hlsong/SMAC_3s_vs_5z/3lhbogd8",
+				"hlsong/SMAC_3s_vs_5z/yquw1f6f",
+				"hlsong/SMAC_3s_vs_5z/3378ijsb",
+				"hlsong/SMAC_3s_vs_5z/j8xu7auv",
+				"hlsong/SMAC_3s_vs_5z/ikbi4ch3",
+			],
+			"MAPPO": [
+				"hlsong/SMAC_3s_vs_5z/59ndduec",
+				"hlsong/SMAC_3s_vs_5z/k4j86761",
+				"hlsong/SMAC_3s_vs_5z/u78prr79",
+				"hlsong/SMAC_3s_vs_5z/w9vrqjf2",
+				"hlsong/SMAC_3s_vs_5z/hzzpribt",
+			],
+		},
