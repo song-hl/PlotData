@@ -66,6 +66,8 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
                 metric_key = "Reward"
             else:
                 run = api.run(run_name)
+                if run.state != "finished":
+                    continue
                 config = {k: v for k, v in run.config.items() if not k.startswith("_")}
                 # print(f"   --- {run.name}")
                 if config["env_name"] == "mujoco":
@@ -253,11 +255,11 @@ if __name__ == "__main__":
     env_name = "StarCraft2"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
-    FLAG_NUM = 3
+    FLAG_NUM = 2
 
-    # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr', 'MAT', 'MAT_pma', 'MAT_jpr']
+    Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr', 'MAT', 'MAT_pma', 'MAT_jpr']
     # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr']
-    Algo_set = ['MAT', 'MAT_pma', 'MAT_jpr']
+    # Algo_set = ['MAT', 'MAT_pma', 'MAT_jpr']
 
     if len(Algo_set) == 3:
         colors = [
@@ -276,7 +278,7 @@ if __name__ == "__main__":
         ]
 
     if FLAG_NUM == 1:
-        scenario = scenarios[0]
+        scenario = '5m_vs_6m'
         print(f"env: {env_name}")
         df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
         plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
