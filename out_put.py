@@ -11,10 +11,13 @@ import datetime
 from matplotlib.pyplot import MultipleLocator
 api = wandb.Api(timeout=19)
 
-env_name = "SMAC"
+# env_name = "SMAC"
 # map_names = ["3s5z"]
 # map_names = ["3s_vs_5z", "mmm" , "3s5z" ,"1c3s5z","8m_vs_9m","5m_vs_6m","10m_vs_11m","6h_vs_8z","mmm2","3s5z_vs_3s6z","25m","27m_vs_30m"]
-map_names = ["3s_vs_5z", "mmm", "3s5z", "1c3s5z", "8m_vs_9m", "5m_vs_6m", "10m_vs_11m", "3s5z_vs_3s6z",]
+# map_names = ["3s_vs_5z", "mmm", "3s5z", "1c3s5z", "8m_vs_9m", "5m_vs_6m", "10m_vs_11m", "3s5z_vs_3s6z",]
+
+env_name = "mujoco"
+map_names = ["ant_4x2", "ant_8x1", "half_6x1", "half_3x2","hopper_3x1", "swimmer_10x2", "walker-6x1", "walker_3x2"]
 for map_name in map_names:
     project = f"hlsong/{env_name}_{map_name}"
     print(project)

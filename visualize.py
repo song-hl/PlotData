@@ -8,6 +8,7 @@ import matplotlib as mpl
 from datetime import datetime
 from matplotlib.pyplot import MultipleLocator
 from math import ceil
+from collections import defaultdict
 api = wandb.Api(timeout=19)
 mpl.rcParams["axes.unicode_minus"] = False
 
@@ -113,6 +114,8 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
                 smoothed_x = np.convolve(x, y, 'same') / np.convolve(z, y, 'same')
                 history["Smooth_Reward"] = smoothed_x
                 indicator = "Smooth_Reward"
+            else:
+                indicator = "Reward"
             curve_list.append(history)
         data = pd.concat(curve_list)
         data.reset_index(drop=True, inplace=True)
@@ -195,7 +198,7 @@ def plot_one_scenario(df, indicator, env_name, scenario, colors, smooth=1, save=
 
 
 def plot_multi_scenario(df_list, indicator_list, env_name, scenarioes, colors, nsize, smooth=1, save=False, save_path='./plot_result'):
-    assert nsize[0] * nsize[1] <= len(scenarioes)
+    assert nsize[0] * nsize[1] >= len(scenarioes)
     sns.set_theme(
         style="darkgrid",
         font_scale=2,
@@ -245,7 +248,7 @@ if __name__ == "__main__":
     store = True
     save_path = './data'
     step_lenth = None
-    smooth = 3
+    smooth = 2
     smooth_method = 2
     save_plot = True
     plot_path = './plot_result'
@@ -253,13 +256,21 @@ if __name__ == "__main__":
     from add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
     env_name = "StarCraft2"
+    # env_name = "mujoco"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
-    FLAG_NUM = 2
+    FLAG_NUM = 3
 
-    Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr', 'MAT', 'MAT_pma', 'MAT_jpr']
+    # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr', 'MAT', 'MAT_pma', 'MAT_jpr']
     # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr']
-    # Algo_set = ['MAT', 'MAT_pma', 'MAT_jpr']
+    Algo_set = ['MAT', 'MAT_pma', 'MAT_jpr']
+    
+    mappo_smooth_dic = defaultdict(lambda: 2)
+    mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
+                        "3s_vs_5z": 1,"mmm":1, "3s5z":2, "1c3s5z":1, "8m_vs_9m":1, "5m_vs_6m":3, "10m_vs_11m":2, "3s5z_vs_3s6z":2}
+    mat_smooth_dic = defaultdict(lambda: 2)
+    mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2}
+    smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
 
     if len(Algo_set) == 3:
         colors = [
@@ -280,20 +291,23 @@ if __name__ == "__main__":
     if FLAG_NUM == 1:
         scenario = '5m_vs_6m'
         print(f"env: {env_name}")
+        smooth = smooth_dic.get(scenario, 2)
         df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
         plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
     if FLAG_NUM == 2:
         for scenario in scenarios:
             print(f"env: {scenario}")
+            smooth = smooth_dic.get(scenario, 2)
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
             plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
     if FLAG_NUM == 3:
         df_list = []
         indicator_list = []
         for scenario in scenarios:
+            smooth = smooth_dic.get(scenario, 2)
             print(f"env: {scenario}")
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
-        nsize = (ceil(len(scenarios) / 3), 3)
+        nsize = (ceil(len(scenarios) / 4), 4)
         plot_multi_scenario(df_list, indicator_list, env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)
