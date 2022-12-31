@@ -1,5 +1,5 @@
 		"3s_vs_5z": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_3s_vs_5z/qyct2efu",
 				"hlsong/SMAC_3s_vs_5z/36pmh8ey",
 				"hlsong/SMAC_3s_vs_5z/pn7qbmdm",
@@ -17,7 +17,7 @@
 				"hlsong/SMAC_3s_vs_5z/a29fcu5e",
 				"hlsong/SMAC_3s_vs_5z/74mmbxa8",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_3s_vs_5z/r5ivcjfe",
 				"hlsong/SMAC_3s_vs_5z/0y0i9f4s",
 				"hlsong/SMAC_3s_vs_5z/lvy01wll",
@@ -40,7 +40,7 @@
 			],
 		},
 		"mmm": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_mmm/xv3u5rlz",
 				"hlsong/SMAC_mmm/01i9mjbz",
 				"hlsong/SMAC_mmm/6pbnyewy",
@@ -61,7 +61,7 @@
 				"hlsong/SMAC_mmm/349vdxnl",
 				"hlsong/SMAC_mmm/us3oflk5",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_mmm/wj53005z",
 				"hlsong/SMAC_mmm/qnvkuxzc",
 				"hlsong/SMAC_mmm/wpp5nxal",
@@ -84,7 +84,7 @@
 			],
 		},
 		"3s5z": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_3s5z/owuh2a4v",
 				"hlsong/SMAC_3s5z/mvj88nxq",
 				"hlsong/SMAC_3s5z/ow2ytulu",
@@ -106,7 +106,7 @@
 				"hlsong/SMAC_3s5z/1mx1wbpi",
 				"hlsong/SMAC_3s5z/jfqdzeil",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_3s5z/0hdbpfzj",
 				"hlsong/SMAC_3s5z/bm878ffh",
 				"hlsong/SMAC_3s5z/fyug206u",
@@ -128,7 +128,7 @@
 			],
 		},
 		"1c3s5z": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_1c3s5z/dzuwmekt",
 				"hlsong/SMAC_1c3s5z/0fyipd3a",
 				"hlsong/SMAC_1c3s5z/rjqqo4dc",
@@ -147,7 +147,7 @@
 				"hlsong/SMAC_1c3s5z/nuk4pnqk",
 				"hlsong/SMAC_1c3s5z/y219jx1x",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_1c3s5z/q61653xl",
 				"hlsong/SMAC_1c3s5z/ejpzltlg",
 				"hlsong/SMAC_1c3s5z/tzkzzuz9",
@@ -169,7 +169,7 @@
 			],
 		},
 		"8m_vs_9m": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_8m_vs_9m/l268palp",
 				"hlsong/SMAC_8m_vs_9m/vkqfhmf2",
 				"hlsong/SMAC_8m_vs_9m/79irtaeb",
@@ -191,7 +191,7 @@
 				"hlsong/SMAC_8m_vs_9m/kt38oyjv",
 				"hlsong/SMAC_8m_vs_9m/oc28cezf",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_8m_vs_9m/48k0btd8",
 				"hlsong/SMAC_8m_vs_9m/568b5mmg",
 				"hlsong/SMAC_8m_vs_9m/1hzad1ha",
@@ -214,7 +214,7 @@
 			],
 		},
 		"5m_vs_6m": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_5m_vs_6m/gph0l05w",
 				"hlsong/SMAC_5m_vs_6m/muuqrbag",
 				"hlsong/SMAC_5m_vs_6m/0egpu1sz",
@@ -235,7 +235,7 @@
 				"hlsong/SMAC_5m_vs_6m/phhlrs8p",
 				"hlsong/SMAC_5m_vs_6m/mididt8r",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_5m_vs_6m/7z7napq5",
 				"hlsong/SMAC_5m_vs_6m/7p6pedlk",
 				"hlsong/SMAC_5m_vs_6m/orux9riw",
@@ -257,7 +257,7 @@
 			],
 		},
 		"10m_vs_11m": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_10m_vs_11m/sws8qd4o",
 				"hlsong/SMAC_10m_vs_11m/2cxpxq1t",
 				"hlsong/SMAC_10m_vs_11m/02de3kl6",
@@ -278,7 +278,7 @@
 				"hlsong/SMAC_10m_vs_11m/t8i48tyj",
 				"hlsong/SMAC_10m_vs_11m/gt5a29em",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_10m_vs_11m/jouykteg",
 				"hlsong/SMAC_10m_vs_11m/b57dfpao",
 				"hlsong/SMAC_10m_vs_11m/fllbn2u3",
@@ -299,7 +299,7 @@
 			],
 		},
 		"3s5z_vs_3s6z": {
-			"MAT_pma": [
+			"MAT_mar": [
 				"hlsong/SMAC_3s5z_vs_3s6z/bdqpyv8g",
 				"hlsong/SMAC_3s5z_vs_3s6z/y4hj9xnn",
 				"hlsong/SMAC_3s5z_vs_3s6z/hwwrn68l",
@@ -320,7 +320,7 @@
 				"hlsong/SMAC_3s5z_vs_3s6z/0dip7ccj",
 				"hlsong/SMAC_3s5z_vs_3s6z/mq5n1yx8",
 			],
-			"MAPPO_pma": [
+			"MAPPO_mar": [
 				"hlsong/SMAC_3s5z_vs_3s6z/u9em3uor",
 				"hlsong/SMAC_3s5z_vs_3s6z/em910s2s",
 				"hlsong/SMAC_3s5z_vs_3s6z/kz952deh",

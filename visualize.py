@@ -261,9 +261,9 @@ if __name__ == "__main__":
     scenarios = [key for key in env.keys()]
     FLAG_NUM = 3
 
-    # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr', 'MAT', 'MAT_pma', 'MAT_jpr']
-    # Algo_set = ['MAPPO', 'MAPPO_pma', 'MAPPO_jpr']
-    Algo_set = ['MAT', 'MAT_pma', 'MAT_jpr']
+    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
+    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+    Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
     
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,

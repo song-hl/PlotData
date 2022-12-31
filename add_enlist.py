@@ -1,7 +1,7 @@
 def envlist():
     MujocoEnv = {
         "ant_4x2": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_ant_4x2/8dh08961",
                 "hlsong/mujoco_ant_4x2/4kdxtbei",
                 "hlsong/mujoco_ant_4x2/mtthsttq",
@@ -19,7 +19,7 @@ def envlist():
                 "hlsong/mujoco_ant_4x2/shdgewyg",
                 "hlsong/mujoco_ant_4x2/piqzueg5",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_ant_4x2/r5uca067",
                 "hlsong/mujoco_ant_4x2/uaf70lo3",
                 "hlsong/mujoco_ant_4x2/ycy1ob46",
@@ -42,7 +42,7 @@ def envlist():
             ],
         },
         "ant_8x1": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_ant_8x1/17vw6bhf",
                 "hlsong/mujoco_ant_8x1/k9cpsycz",
                 "hlsong/mujoco_ant_8x1/4npagnby",
@@ -59,7 +59,7 @@ def envlist():
                 "hlsong/mujoco_ant_8x1/qgvixq28",
                 "hlsong/mujoco_ant_8x1/jki9ojl5",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_ant_8x1/ci4hua6s",
                 "hlsong/mujoco_ant_8x1/xpsdqnfr",
                 "hlsong/mujoco_ant_8x1/iw906t8u",
@@ -78,7 +78,7 @@ def envlist():
             ],
         },
         "half_6x1": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_half_6x1/yaxzfdnb",
                 "hlsong/mujoco_half_6x1/a13qstj2",
                 "hlsong/mujoco_half_6x1/2b53dw5n",
@@ -100,7 +100,7 @@ def envlist():
                 "hlsong/mujoco_half_6x1/0o47rapd",
                 "hlsong/mujoco_half_6x1/mr4yrttz",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_half_6x1/gst8bfeu",
                 "hlsong/mujoco_half_6x1/a1nawche",
                 "hlsong/mujoco_half_6x1/epjv9iej",
@@ -122,7 +122,7 @@ def envlist():
             ],
         },
         "half_3x2": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_half_3x2/oz0zsrxb",
                 "hlsong/mujoco_half_3x2/c0mew7s6",
                 "hlsong/mujoco_half_3x2/d6a6i6i0",
@@ -138,7 +138,7 @@ def envlist():
                 "hlsong/mujoco_half_3x2/iohjq1hl",
                 "hlsong/mujoco_half_3x2/4j42xesu",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_half_3x2/iedt6ube",
                 "hlsong/mujoco_half_3x2/dnap14ay",
                 "hlsong/mujoco_half_3x2/ebmgxryb",
@@ -159,7 +159,7 @@ def envlist():
             ],
         },
         "hopper_3x1": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_hopper_3x1/yi7ngrag",
                 "hlsong/mujoco_hopper_3x1/wtet5c6u",
                 "hlsong/mujoco_hopper_3x1/wonso09y",
@@ -179,7 +179,7 @@ def envlist():
                 "hlsong/mujoco_hopper_3x1/u8cxv4rc",
                 "hlsong/mujoco_hopper_3x1/0411ynv1",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_hopper_3x1/5gj2nq8p",
                 "hlsong/mujoco_hopper_3x1/09n9xmoq",
                 "hlsong/mujoco_hopper_3x1/zib9gbgb",
@@ -202,7 +202,7 @@ def envlist():
             ],
         },
         "swimmer_10x2": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_swimmer_10x2/olwf2jl0",
                 "hlsong/mujoco_swimmer_10x2/kgzwbpfu",
                 "hlsong/mujoco_swimmer_10x2/5b5zmw0d",
@@ -220,7 +220,7 @@ def envlist():
                 "hlsong/mujoco_swimmer_10x2/x3278ct0",
                 "hlsong/mujoco_swimmer_10x2/s8lt1fp9",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_swimmer_10x2/wg7f59ro",
                 "hlsong/mujoco_swimmer_10x2/9g5indk9",
                 "hlsong/mujoco_swimmer_10x2/2brm0sgz",
@@ -243,7 +243,7 @@ def envlist():
             ],
         },
         "walker-6x1": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_walker-6x1/we8d3313",
                 "hlsong/mujoco_walker-6x1/y1ciyt0g",
                 "hlsong/mujoco_walker-6x1/659yq30z",
@@ -262,7 +262,7 @@ def envlist():
                 "hlsong/mujoco_walker-6x1/na9qcphs",
                 "hlsong/mujoco_walker-6x1/5fkg3sgh",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_walker-6x1/t8svt2te",
                 "hlsong/mujoco_walker-6x1/xhwtgy4i",
                 "hlsong/mujoco_walker-6x1/5zzohm7p",
@@ -282,7 +282,7 @@ def envlist():
             ],
         },
         "walker_3x2": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/mujoco_walker_3x2/idlxeo5x",
                 "hlsong/mujoco_walker_3x2/rrlg9183",
                 "hlsong/mujoco_walker_3x2/ru1iv3oy",
@@ -299,7 +299,7 @@ def envlist():
                 "hlsong/mujoco_walker_3x2/jvivjp9k",
                 "hlsong/mujoco_walker_3x2/mrolcvwk",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/mujoco_walker_3x2/31jl46d8",
                 "hlsong/mujoco_walker_3x2/683v1rd2",
                 "hlsong/mujoco_walker_3x2/12wf3qos",
@@ -323,7 +323,7 @@ def envlist():
     }
     SMACEnv = {
         "3s_vs_5z": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_3s_vs_5z/qyct2efu",
                 "hlsong/SMAC_3s_vs_5z/36pmh8ey",
                 "hlsong/SMAC_3s_vs_5z/pn7qbmdm",
@@ -341,7 +341,7 @@ def envlist():
                 "hlsong/SMAC_3s_vs_5z/a29fcu5e",
                 "hlsong/SMAC_3s_vs_5z/74mmbxa8",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_3s_vs_5z/r5ivcjfe",
                 "hlsong/SMAC_3s_vs_5z/0y0i9f4s",
                 "hlsong/SMAC_3s_vs_5z/lvy01wll",
@@ -364,7 +364,7 @@ def envlist():
             ],
         },
         "mmm": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_mmm/xv3u5rlz",
                 "hlsong/SMAC_mmm/01i9mjbz",
                 "hlsong/SMAC_mmm/6pbnyewy",
@@ -385,7 +385,7 @@ def envlist():
                 "hlsong/SMAC_mmm/349vdxnl",
                 "hlsong/SMAC_mmm/us3oflk5",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_mmm/wj53005z",
                 "hlsong/SMAC_mmm/qnvkuxzc",
                 "hlsong/SMAC_mmm/wpp5nxal",
@@ -408,7 +408,7 @@ def envlist():
             ],
         },
         "3s5z": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_3s5z/owuh2a4v",
                 "hlsong/SMAC_3s5z/mvj88nxq",
                 "hlsong/SMAC_3s5z/ow2ytulu",
@@ -430,7 +430,7 @@ def envlist():
                 "hlsong/SMAC_3s5z/1mx1wbpi",
                 "hlsong/SMAC_3s5z/jfqdzeil",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_3s5z/0hdbpfzj",
                 "hlsong/SMAC_3s5z/bm878ffh",
                 "hlsong/SMAC_3s5z/fyug206u",
@@ -452,7 +452,7 @@ def envlist():
             ],
         },
         "1c3s5z": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_1c3s5z/dzuwmekt",
                 "hlsong/SMAC_1c3s5z/0fyipd3a",
                 "hlsong/SMAC_1c3s5z/rjqqo4dc",
@@ -471,7 +471,7 @@ def envlist():
                 "hlsong/SMAC_1c3s5z/nuk4pnqk",
                 "hlsong/SMAC_1c3s5z/y219jx1x",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_1c3s5z/q61653xl",
                 "hlsong/SMAC_1c3s5z/ejpzltlg",
                 "hlsong/SMAC_1c3s5z/tzkzzuz9",
@@ -493,7 +493,7 @@ def envlist():
             ],
         },
         "8m_vs_9m": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_8m_vs_9m/l268palp",
                 "hlsong/SMAC_8m_vs_9m/vkqfhmf2",
                 "hlsong/SMAC_8m_vs_9m/79irtaeb",
@@ -515,7 +515,7 @@ def envlist():
                 "hlsong/SMAC_8m_vs_9m/kt38oyjv",
                 "hlsong/SMAC_8m_vs_9m/oc28cezf",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_8m_vs_9m/48k0btd8",
                 "hlsong/SMAC_8m_vs_9m/568b5mmg",
                 "hlsong/SMAC_8m_vs_9m/1hzad1ha",
@@ -538,7 +538,7 @@ def envlist():
             ],
         },
         "5m_vs_6m": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_5m_vs_6m/gph0l05w",
                 "hlsong/SMAC_5m_vs_6m/muuqrbag",
                 "hlsong/SMAC_5m_vs_6m/0egpu1sz",
@@ -559,7 +559,7 @@ def envlist():
                 "hlsong/SMAC_5m_vs_6m/phhlrs8p",
                 "hlsong/SMAC_5m_vs_6m/mididt8r",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_5m_vs_6m/7z7napq5",
                 "hlsong/SMAC_5m_vs_6m/7p6pedlk",
                 "hlsong/SMAC_5m_vs_6m/orux9riw",
@@ -581,7 +581,7 @@ def envlist():
             ],
         },
         "10m_vs_11m": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_10m_vs_11m/sws8qd4o",
                 "hlsong/SMAC_10m_vs_11m/2cxpxq1t",
                 "hlsong/SMAC_10m_vs_11m/02de3kl6",
@@ -602,7 +602,7 @@ def envlist():
                 "hlsong/SMAC_10m_vs_11m/t8i48tyj",
                 "hlsong/SMAC_10m_vs_11m/gt5a29em",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_10m_vs_11m/jouykteg",
                 "hlsong/SMAC_10m_vs_11m/b57dfpao",
                 "hlsong/SMAC_10m_vs_11m/fllbn2u3",
@@ -623,7 +623,7 @@ def envlist():
             ],
         },
         "3s5z_vs_3s6z": {
-            "MAT_pma": [
+            "MAT_mar": [
                 "hlsong/SMAC_3s5z_vs_3s6z/bdqpyv8g",
                 "hlsong/SMAC_3s5z_vs_3s6z/y4hj9xnn",
                 "hlsong/SMAC_3s5z_vs_3s6z/hwwrn68l",
@@ -644,7 +644,7 @@ def envlist():
                 "hlsong/SMAC_3s5z_vs_3s6z/0dip7ccj",
                 "hlsong/SMAC_3s5z_vs_3s6z/mq5n1yx8",
             ],
-            "MAPPO_pma": [
+            "MAPPO_mar": [
                 "hlsong/SMAC_3s5z_vs_3s6z/u9em3uor",
                 "hlsong/SMAC_3s5z_vs_3s6z/em910s2s",
                 "hlsong/SMAC_3s5z_vs_3s6z/kz952deh",

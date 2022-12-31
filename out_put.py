@@ -24,7 +24,7 @@ for map_name in map_names:
     runs = api.runs(project)
     dic = defaultdict(list)
     order_key = ['mat_mask', 'mat_jpr', 'mat', 'mappo_maska', 'mappo_jpr', 'mappo']
-    algo_name = {'mat_mask': "MAT_pma", 'mat_jpr': "MAT_jpr", 'mat': "MAT", 'mappo_maska': "MAPPO_pma", 'mappo_jpr': "MAPPO_jpr", 'mappo': "MAPPO"}
+    algo_name = {'mat_mask': "MAT_mar", 'mat_jpr': "MAT_jpr", 'mat': "MAT", 'mappo_maska': "MAPPO_mar", 'mappo_jpr': "MAPPO_jpr", 'mappo': "MAPPO"}
 
     for run in runs:
         if run.state != "finished":
