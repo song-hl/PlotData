@@ -1,4 +1,4 @@
-from add_enlist import envlist as ENVLISTa
+from runlist.add_enlist import envlist as ENVLISTa
 from visualize import (
     get_df_from_local,
     get_df_from_wandb,

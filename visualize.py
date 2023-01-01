@@ -254,7 +254,7 @@ if __name__ == "__main__":
     save_plot = True
     plot_path = './plot_result'
 
-    from add_enlist import envlist as ENVLISTa
+    from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
     # env_name = "StarCraft2"
     env_name = "mujoco"
@@ -264,8 +264,8 @@ if __name__ == "__main__":
     FLAG_NUM = 3
 
     # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
-    Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
-    # Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
+    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+    Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
     
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
