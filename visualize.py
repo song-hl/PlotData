@@ -64,6 +64,7 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
             if run_name in file_list.keys():
                 data_path = file_list[run_name]
                 history = pd.read_csv(data_path)
+                history["algorithm"] = algo
                 metric_key = "Reward"
             else:
                 run = api.run(run_name)
@@ -166,7 +167,7 @@ def get_df_from_local(env_name, scenario, data_path, smooth=1, smooth_method=2, 
     return df, indicator
 
 
-def plot_one_scenario(df, indicator, env_name, scenario, colors, smooth=1, save=False, save_path='./plot_result'):
+def plot_one_scenario(df, indicator, hue_name, env_name, scenario, colors, smooth=1, save=False, save_path='./plot_result'):
     sns.set_theme(
         style="darkgrid",
         font_scale=2,
@@ -197,7 +198,7 @@ def plot_one_scenario(df, indicator, env_name, scenario, colors, smooth=1, save=
     # plt.show()
 
 
-def plot_multi_scenario(df_list, indicator_list, env_name, scenarioes, colors, nsize, smooth=1, save=False, save_path='./plot_result'):
+def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes, colors, nsize, smooth=1, save=False, save_path='./plot_result'):
     assert nsize[0] * nsize[1] >= len(scenarioes)
     sns.set_theme(
         style="darkgrid",
@@ -217,7 +218,7 @@ def plot_multi_scenario(df_list, indicator_list, env_name, scenarioes, colors, n
             ax = axis[i]
         ax.set_title(scenario, fontsize=25)
         sns.lineplot(
-            data=df, x="Environment steps", y=indicator, hue="algorithm", palette=colors, ax=ax, errorbar='sd'
+            data=df, x="Environment steps", y=indicator, hue=hue_name, palette=colors, ax=ax, errorbar='sd'
         )
         ax.set_xlabel('')
         ax.set_ylabel('')
@@ -255,15 +256,16 @@ if __name__ == "__main__":
 
     from add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
-    env_name = "StarCraft2"
-    # env_name = "mujoco"
+    # env_name = "StarCraft2"
+    env_name = "mujoco"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
+    hue_name = 'algorithm'
     FLAG_NUM = 3
 
     # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
-    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
-    Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
+    Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+    # Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
     
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
@@ -293,13 +295,13 @@ if __name__ == "__main__":
         print(f"env: {env_name}")
         smooth = smooth_dic.get(scenario, 2)
         df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
-        plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
+        plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
     if FLAG_NUM == 2:
         for scenario in scenarios:
             print(f"env: {scenario}")
             smooth = smooth_dic.get(scenario, 2)
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
-            plot_one_scenario(df, indicator, env_name, scenario, colors, smooth, save_plot, plot_path)
+            plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
     if FLAG_NUM == 3:
         df_list = []
         indicator_list = []
@@ -309,5 +311,6 @@ if __name__ == "__main__":
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
-        nsize = (ceil(len(scenarios) / 4), 4)
-        plot_multi_scenario(df_list, indicator_list, env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)
+        plots_one_row = 4
+        nsize = (ceil(len(scenarios) / plots_one_row), plots_one_row)
+        plot_multi_scenario(df_list, indicator_list, hue_name,env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)

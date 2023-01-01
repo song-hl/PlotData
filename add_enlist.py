@@ -8,6 +8,7 @@ def envlist():
                 "hlsong/mujoco_ant_4x2/0krjrh05",
             ],
             "MAT_jpr": [
+                "hlsong/mujoco_ant_4x2/uot6wi4g",
                 "hlsong/mujoco_ant_4x2/h4txadr5",
                 "hlsong/mujoco_ant_4x2/nr0jro65",
                 "hlsong/mujoco_ant_4x2/ikghrq9v",
@@ -20,7 +21,6 @@ def envlist():
                 "hlsong/mujoco_ant_4x2/piqzueg5",
             ],
             "MAPPO_mar": [
-                "hlsong/mujoco_ant_4x2/r5uca067",
                 "hlsong/mujoco_ant_4x2/uaf70lo3",
                 "hlsong/mujoco_ant_4x2/ycy1ob46",
                 "hlsong/mujoco_ant_4x2/7jgbmr7j",
@@ -29,6 +29,7 @@ def envlist():
                 "hlsong/mujoco_ant_4x2/1cv9pyp1",
             ],
             "MAPPO_jpr": [
+                "hlsong/mujoco_ant_4x2/5cxtqpvx",
                 "hlsong/mujoco_ant_4x2/km7g8exs",
                 "hlsong/mujoco_ant_4x2/mktlat4t",
                 "hlsong/mujoco_ant_4x2/e0ypw65e",
@@ -49,6 +50,8 @@ def envlist():
                 "hlsong/mujoco_ant_8x1/6trtqsp5",
             ],
             "MAT_jpr": [
+                "hlsong/mujoco_ant_8x1/1shwxleb",
+                "hlsong/mujoco_ant_8x1/k9tqfetx",
                 "hlsong/mujoco_ant_8x1/zo5mor93",
                 "hlsong/mujoco_ant_8x1/2ti9dn60",
                 "hlsong/mujoco_ant_8x1/86c67ui4",
@@ -66,6 +69,7 @@ def envlist():
                 "hlsong/mujoco_ant_8x1/uxpomm1a",
             ],
             "MAPPO_jpr": [
+                "hlsong/mujoco_ant_8x1/zy4lynj6",
                 "hlsong/mujoco_ant_8x1/fx1bbs24",
                 "hlsong/mujoco_ant_8x1/c2c7y6v7",
             ],
@@ -79,26 +83,25 @@ def envlist():
         },
         "half_6x1": {
             "MAT_mar": [
+                "hlsong/mujoco_half_6x1/opn8up26",
+                "hlsong/mujoco_half_6x1/zvx57y67",
+                "hlsong/mujoco_half_6x1/swcq7oj8",
                 "hlsong/mujoco_half_6x1/yaxzfdnb",
-                "hlsong/mujoco_half_6x1/a13qstj2",
                 "hlsong/mujoco_half_6x1/2b53dw5n",
-                "hlsong/mujoco_half_6x1/6vzlruzt",
-                "hlsong/mujoco_half_6x1/1lmhzdn4",
             ],
             "MAT_jpr": [
+                "hlsong/mujoco_half_6x1/t46m3fzp",
+                "hlsong/mujoco_half_6x1/9uco0niy",
                 "hlsong/mujoco_half_6x1/2b4qt20w",
                 "hlsong/mujoco_half_6x1/ey8s8a2l",
             ],
             "MAT": [
-                "hlsong/mujoco_half_6x1/irkakfpb",
+                "hlsong/mujoco_half_6x1/gwlx6k8j",
+                "hlsong/mujoco_half_6x1/zs3csohr",
+                "hlsong/mujoco_half_6x1/vcfleapp",
+                "hlsong/mujoco_half_6x1/jrf4di37",
+                "hlsong/mujoco_half_6x1/ubscbom5",
                 "hlsong/mujoco_half_6x1/baypu4vw",
-                "hlsong/mujoco_half_6x1/pse1833r",
-                "hlsong/mujoco_half_6x1/p5tti5wp",
-                "hlsong/mujoco_half_6x1/59umy3yf",
-                "hlsong/mujoco_half_6x1/f6flf5mt",
-                "hlsong/mujoco_half_6x1/cus8jz14",
-                "hlsong/mujoco_half_6x1/0o47rapd",
-                "hlsong/mujoco_half_6x1/mr4yrttz",
             ],
             "MAPPO_mar": [
                 "hlsong/mujoco_half_6x1/gst8bfeu",
@@ -111,7 +114,7 @@ def envlist():
                 "hlsong/mujoco_half_6x1/u5rmf6zi",
                 "hlsong/mujoco_half_6x1/8txaqc1w",
                 "hlsong/mujoco_half_6x1/778fhsnd",
-                "hlsong/mujoco_half_6x1/pp7jv7fa",
+                # "hlsong/mujoco_half_6x1/pp7jv7fa",
             ],
             "MAPPO": [
                 "hlsong/mujoco_half_6x1/e9wg2ay1",
@@ -129,6 +132,7 @@ def envlist():
                 "hlsong/mujoco_half_3x2/3i3ybzj6",
             ],
             "MAT_jpr": [
+                "hlsong/mujoco_half_3x2/wtulolnt",
                 "hlsong/mujoco_half_3x2/z9q1m4j1",
                 "hlsong/mujoco_half_3x2/y6d3w7er",
                 "hlsong/mujoco_half_3x2/h5v4c3ni",
@@ -209,6 +213,8 @@ def envlist():
                 "hlsong/mujoco_swimmer_10x2/qmtyh05k",
             ],
             "MAT_jpr": [
+                "hlsong/mujoco_swimmer_10x2/ucvsq148",
+                "hlsong/mujoco_swimmer_10x2/tt8pz6c0",
                 "hlsong/mujoco_swimmer_10x2/xmfj3v53",
                 "hlsong/mujoco_swimmer_10x2/8kt2whu2",
                 "hlsong/mujoco_swimmer_10x2/wz79vvxl",
@@ -288,6 +294,8 @@ def envlist():
                 "hlsong/mujoco_walker_3x2/ru1iv3oy",
             ],
             "MAT_jpr": [
+                "hlsong/mujoco_walker_3x2/zzxiz397",
+                "hlsong/mujoco_walker_3x2/nptecxd4",
                 "hlsong/mujoco_walker_3x2/4z86131g",
                 "hlsong/mujoco_walker_3x2/9oh91ntv",
                 "hlsong/mujoco_walker_3x2/g2z7icfg",
@@ -319,7 +327,6 @@ def envlist():
                 "hlsong/mujoco_walker_3x2/288swhro",
             ],
         },
-
     }
     SMACEnv = {
         "3s_vs_5z": {
@@ -622,6 +629,50 @@ def envlist():
                 "hlsong/SMAC_10m_vs_11m/ehi950ph",
             ],
         },
+        "6h_vs_8z": {
+            "MAT_mar": [
+                "hlsong/SMAC_6h_vs_8z/uns7ba2u",
+                "hlsong/SMAC_6h_vs_8z/gekw5jiz",
+                "hlsong/SMAC_6h_vs_8z/2m86rnng",
+                "hlsong/SMAC_6h_vs_8z/9jkv1940",
+                "hlsong/SMAC_6h_vs_8z/o4sjra0m",
+            ],
+            "MAT_jpr": [
+                "hlsong/SMAC_6h_vs_8z/2l868j12",
+                "hlsong/SMAC_6h_vs_8z/lw2p9cu1",
+                "hlsong/SMAC_6h_vs_8z/2hsdbcqe",
+                "hlsong/SMAC_6h_vs_8z/6oidixa4",
+                "hlsong/SMAC_6h_vs_8z/1pz9v23b",
+            ],
+            "MAT": [
+                "hlsong/SMAC_6h_vs_8z/wbf4vwc1",
+                "hlsong/SMAC_6h_vs_8z/tw73gzie",
+                "hlsong/SMAC_6h_vs_8z/0j6ympdo",
+                "hlsong/SMAC_6h_vs_8z/k594xm1c",
+            ],
+            "MAPPO_mar": [
+                "hlsong/SMAC_6h_vs_8z/16d9ii68",
+                "hlsong/SMAC_6h_vs_8z/0ecpr4tf",
+                "hlsong/SMAC_6h_vs_8z/v5msjc97",
+                "hlsong/SMAC_6h_vs_8z/k3efvuq2",
+                "hlsong/SMAC_6h_vs_8z/mo4qpiz9",
+            ],
+            "MAPPO_jpr": [
+                "hlsong/SMAC_6h_vs_8z/ctvq9fsm",
+                "hlsong/SMAC_6h_vs_8z/dwumjwse",
+                "hlsong/SMAC_6h_vs_8z/n7ewobdm",
+                "hlsong/SMAC_6h_vs_8z/5ufik5e0",
+                "hlsong/SMAC_6h_vs_8z/5zrfvl26",
+                "hlsong/SMAC_6h_vs_8z/8t8m2mrd",
+            ],
+            "MAPPO": [
+                "hlsong/SMAC_6h_vs_8z/ai7yr67z",
+                "hlsong/SMAC_6h_vs_8z/slk79us2",
+                "hlsong/SMAC_6h_vs_8z/rvr8a136",
+                "hlsong/SMAC_6h_vs_8z/7enfddb6",
+                "hlsong/SMAC_6h_vs_8z/7bvq929d",
+            ],
+        },
         "3s5z_vs_3s6z": {
             "MAT_mar": [
                 "hlsong/SMAC_3s5z_vs_3s6z/bdqpyv8g",
@@ -662,6 +713,48 @@ def envlist():
                 "hlsong/SMAC_3s5z_vs_3s6z/gup3oot7",
                 "hlsong/SMAC_3s5z_vs_3s6z/zj1pm2uy",
                 "hlsong/SMAC_3s5z_vs_3s6z/e23t45j4",
+            ],
+        },
+        "27m_vs_30m": {
+            "MAT_mar": [
+                # "hlsong/SMAC_27m_vs_30m/b0askhvw",
+                "hlsong/SMAC_27m_vs_30m/fgwsh0x1",
+                "hlsong/SMAC_27m_vs_30m/8gyaxkaa",
+                "hlsong/SMAC_27m_vs_30m/oatsj8zo",
+                "hlsong/SMAC_27m_vs_30m/x3vwj1hy",
+            ],
+            "MAT_jpr": [
+                "hlsong/SMAC_27m_vs_30m/kyre8fne",
+                "hlsong/SMAC_27m_vs_30m/ot7t8vji",
+                "hlsong/SMAC_27m_vs_30m/irihc4um",
+            ],
+            "MAT": [
+                "hlsong/SMAC_27m_vs_30m/9efjj6eb",
+                "hlsong/SMAC_27m_vs_30m/ml8pp32e",
+                "hlsong/SMAC_27m_vs_30m/867tlogp",
+                "hlsong/SMAC_27m_vs_30m/j2tv7fdy",
+                "hlsong/SMAC_27m_vs_30m/47k9iqz2",
+            ],
+            "MAPPO_mar": [
+                "hlsong/SMAC_27m_vs_30m/iqtwgtpy",
+                "hlsong/SMAC_27m_vs_30m/6k6zf3jf",
+                "hlsong/SMAC_27m_vs_30m/v5enflzc",
+                "hlsong/SMAC_27m_vs_30m/hwxqh4i7",
+                "hlsong/SMAC_27m_vs_30m/uuibp2ye",
+            ],
+            "MAPPO_jpr": [
+                "hlsong/SMAC_27m_vs_30m/atmyidda",
+                "hlsong/SMAC_27m_vs_30m/2mymlr6v",
+                "hlsong/SMAC_27m_vs_30m/t7vcpo1e",
+                "hlsong/SMAC_27m_vs_30m/vmu9ulwy",
+                "hlsong/SMAC_27m_vs_30m/c0vry88e",
+            ],
+            "MAPPO": [
+                "hlsong/SMAC_27m_vs_30m/cazcwnci",
+                "hlsong/SMAC_27m_vs_30m/gm78o6om",
+                "hlsong/SMAC_27m_vs_30m/uwnat49r",
+                "hlsong/SMAC_27m_vs_30m/u644udhd",
+                "hlsong/SMAC_27m_vs_30m/1nez93du",
             ],
         },
 
