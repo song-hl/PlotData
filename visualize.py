@@ -222,6 +222,9 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         )
         ax.set_xlabel('')
         ax.set_ylabel('')
+        # ax.xaxis.set_ticklabels([])
+        # ax.yaxis.set_ticklabels([])
+        
         # ax.xaxis.set_major_locator(MultipleLocator(250000))
         ax.legend(fontsize=20, loc='best')
     # set labels
@@ -264,8 +267,8 @@ if __name__ == "__main__":
     FLAG_NUM = 3
 
     # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
-    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
-    Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
+    Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+    # Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
     
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
@@ -311,6 +314,6 @@ if __name__ == "__main__":
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
-        plots_one_row = 4
+        plots_one_row = 2
         nsize = (ceil(len(scenarios) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name,env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)

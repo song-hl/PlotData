@@ -43,6 +43,7 @@ MujocoEnv = {
     },
     "ant_8x1": {
         "MAT_mar": [
+            "hlsong/mujoco_ant_8x1/ckchag94",
             "hlsong/mujoco_ant_8x1/17vw6bhf",
             "hlsong/mujoco_ant_8x1/k9cpsycz",
             "hlsong/mujoco_ant_8x1/4npagnby",
@@ -53,7 +54,6 @@ MujocoEnv = {
             "hlsong/mujoco_ant_8x1/1shwxleb",
             "hlsong/mujoco_ant_8x1/k9tqfetx",
             "hlsong/mujoco_ant_8x1/zo5mor93",
-            "hlsong/mujoco_ant_8x1/2ti9dn60",
             "hlsong/mujoco_ant_8x1/86c67ui4",
         ],
         "MAT": [
@@ -207,14 +207,14 @@ MujocoEnv = {
     },
     "swimmer_10x2": {
         "MAT_mar": [
+            "hlsong/mujoco_swimmer_10x2/r57vh87z",
+            "hlsong/mujoco_swimmer_10x2/x4c4jgth",
             "hlsong/mujoco_swimmer_10x2/olwf2jl0",
             "hlsong/mujoco_swimmer_10x2/kgzwbpfu",
             "hlsong/mujoco_swimmer_10x2/5b5zmw0d",
-            "hlsong/mujoco_swimmer_10x2/qmtyh05k",
         ],
         "MAT_jpr": [
             "hlsong/mujoco_swimmer_10x2/ucvsq148",
-            "hlsong/mujoco_swimmer_10x2/tt8pz6c0",
             "hlsong/mujoco_swimmer_10x2/xmfj3v53",
             "hlsong/mujoco_swimmer_10x2/8kt2whu2",
             "hlsong/mujoco_swimmer_10x2/wz79vvxl",
@@ -227,11 +227,11 @@ MujocoEnv = {
             "hlsong/mujoco_swimmer_10x2/s8lt1fp9",
         ],
         "MAPPO_mar": [
-            "hlsong/mujoco_swimmer_10x2/wg7f59ro",
-            "hlsong/mujoco_swimmer_10x2/9g5indk9",
+            "hlsong/mujoco_swimmer_10x2/w9gd6n6q",
+            "hlsong/mujoco_swimmer_10x2/toox990n",
+            "hlsong/mujoco_swimmer_10x2/6phprcom",
+            "hlsong/mujoco_swimmer_10x2/qwmfnskh",
             "hlsong/mujoco_swimmer_10x2/2brm0sgz",
-            "hlsong/mujoco_swimmer_10x2/4kks5fy9",
-            "hlsong/mujoco_swimmer_10x2/rvrtm4ih",
         ],
         "MAPPO_jpr": [
             "hlsong/mujoco_swimmer_10x2/lvgfyezs",
