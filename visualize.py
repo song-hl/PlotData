@@ -216,7 +216,7 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     ]
     colors2 = [
         sns.color_palette("Set2")[1],  # MAT_mar
-        sns.color_palette("Set2")[2],  # MAT_jpr
+        sns.color_palette("husl", 9)[7],  # MAT_jpr
         sns.color_palette("Set2")[0],  # MAT
     ]
     colors_dic = {"MAPPO_mar": colors1[0],
@@ -244,7 +244,7 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         # ax.yaxis.set_ticklabels([])
         
         # ax.xaxis.set_major_locator(MultipleLocator(250000))
-        ax.legend(fontsize=20, loc='best')
+        ax.get_legend().set_visible(False)
     # set labels
     if len(axis.shape) > 1:
         for ax in axis[-1, :]:
@@ -255,6 +255,22 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         for ax in axis:
             ax.set_xlabel('Environment steps', labelpad=10)
         axis[0].set_ylabel('Reward', labelpad=10)
+
+    # 主图加label
+    line_mat, label_mat = axis[0, 0].get_legend_handles_labels() if len(axis.shape) > 1 else axis[0].get_legend_handles_labels()
+    line_mapppo, label_mapppo = axis[-1, -1].get_legend_handles_labels() if len(axis.shape) > 1 else axis[-1].get_legend_handles_labels()
+    lines = line_mat + line_mapppo
+    labels = label_mat + label_mapppo
+    if axis.shape[0] == 1:
+        anchor = (0.5, -0.1)
+    elif axis.shape[0] == 2:
+        anchor = (0.5, 0)
+    elif axis.shape[0] == 4:
+        anchor = (0.5, 0.05)
+    else:
+        anchor = (0.5, 0)
+    # fig.legend(loc='lower center', ncol=6, handles=lines, labels=labels, labelspacing=0.1, fontsize=35, bbox_to_anchor=anchor)
+
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
     if save == True:
@@ -277,10 +293,10 @@ if __name__ == "__main__":
 
     from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
-    # env_name = "StarCraft2"
+    env_name = "StarCraft2"
     # env_name = "mujoco"
     # env_name = "drone"
-    env_name = "football"
+    # env_name = "football"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
     hue_name = 'algorithm'
@@ -293,11 +309,11 @@ if __name__ == "__main__":
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
                         "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                        "flock_pid": 1, "flock": 2, "leader": 2, "leader_pid": 1
+                        "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1
                         }
     mat_smooth_dic = defaultdict(lambda: 2)
     mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                      "flock_pid": 1, "flock": 1, "leader": 1, "leader_pid": 1
+                      "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1
                       }
     smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
 
@@ -335,20 +351,38 @@ if __name__ == "__main__":
         map_name = []
         Algo_set1 = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
         Algo_set2 = ['MAT', 'MAT_mar', 'MAT_jpr']
+        Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
         for scenario in scenarios:
             smooth = smooth_dic.get(scenario, 2)
+            if scenario == 'Flock_RPM' or scenario == 'LeaderFollower_RPM':
+                continue
+            if scenario == 'walker_3x2' or scenario == 'half_3x2':
+                continue
             print(f"env: {scenario}")
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set1, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
             map_name.append(scenario)
         for scenario in scenarios:
+            if scenario == 'walker_3x2' or scenario == 'half_3x2':
+                continue
             smooth = smooth_dic.get(scenario, 2)
             print(f"env: {scenario}")
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set2, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
             map_name.append(scenario)
+        
+        # PLOT SIX ALGORTHM
+        # for scenario in scenarios:
+        #     if scenario == 'walker_3x2' or scenario == 'half_3x2':
+        #         continue
+        #     smooth = smooth_dic.get(scenario, 2)
+        #     print(f"env: {scenario}")
+        #     df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+        #     df_list.append(df)
+        #     indicator_list.append(indicator)
+        #     map_name.append(scenario)
         plots_one_row = 6
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
