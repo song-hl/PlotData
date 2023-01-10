@@ -1,5 +1,5 @@
 DroneEnv = {
-    "flock": {
+    "Flock_RPM": {
         "MAT_mar": [
             "hlsong/Drones_flock/rjjs1itw",
             "hlsong/Drones_flock/8gzqrav1",
@@ -44,7 +44,7 @@ DroneEnv = {
             "hlsong/Drones_flock/dn4ui78f",
         ],
     },
-    "flock_pid": {
+    "Flock_PID": {
         "MAT_mar": [
             "hlsong/Drones_flock_pid/m5bcdvaw",
             "hlsong/Drones_flock_pid/jepwikhf",
@@ -90,7 +90,7 @@ DroneEnv = {
             "hlsong/Drones_flock_pid/jcsyt8l6",
         ],
     },
-    "leader": {
+    "LeaderFollower_RPM": {
         "MAT_mar": [
             "hlsong/Drones_leader/23n5fhhb",
             "hlsong/Drones_leader/0tu3jwut",
@@ -138,7 +138,7 @@ DroneEnv = {
             "hlsong/Drones_leader/i3svcuup",
         ],
     },
-    "leader_pid": {
+    "LeaderFollower_PID": {
         "MAT_mar": [
             "hlsong/Drones_leader_pid/loocf00l",
             "hlsong/Drones_leader_pid/4v369hiq",
