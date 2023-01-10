@@ -260,21 +260,26 @@ if __name__ == "__main__":
     from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
     # env_name = "StarCraft2"
-    env_name = "mujoco"
+    # env_name = "mujoco"
+    env_name = "drone"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
     hue_name = 'algorithm'
     FLAG_NUM = 3
 
     # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
-    Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
-    # Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
+    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+    Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
     
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
-                        "3s_vs_5z": 1,"mmm":1, "3s5z":2, "1c3s5z":1, "8m_vs_9m":1, "5m_vs_6m":3, "10m_vs_11m":2, "3s5z_vs_3s6z":2}
+                        "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
+                        "flock_pid": 1, "flock": 1, "leader": 1, "leader_pid": 1
+                        }
     mat_smooth_dic = defaultdict(lambda: 2)
-    mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2}
+    mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
+                      "flock_pid": 1, "flock": 1, "leader": 1, "leader_pid": 1
+                      }
     smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
 
     if len(Algo_set) == 3:
@@ -314,6 +319,6 @@ if __name__ == "__main__":
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
-        plots_one_row = 2
+        plots_one_row = 4
         nsize = (ceil(len(scenarios) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name,env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)
