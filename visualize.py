@@ -260,8 +260,9 @@ if __name__ == "__main__":
     from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
     # env_name = "StarCraft2"
-    env_name = "mujoco"
+    # env_name = "mujoco"
     # env_name = "drone"
+    env_name = "football"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
     hue_name = 'algorithm'
