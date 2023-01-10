@@ -209,6 +209,23 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     )
     fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(14*nsize[1], 10*nsize[0]*1.1))
 
+    colors1 = [
+        sns.color_palette("husl", 9)[0],  # MAPPO_mar
+        sns.color_palette("husl", 9)[6],  # MAPPO_jpr
+        sns.color_palette("husl", 9)[3],  # MAPPO
+    ]
+    colors2 = [
+        sns.color_palette("Set2")[1],  # MAT_mar
+        sns.color_palette("Set2")[2],  # MAT_jpr
+        sns.color_palette("Set2")[0],  # MAT
+    ]
+    colors_dic = {"MAPPO_mar": colors1[0],
+                "MAPPO_jpr": colors1[1],
+                "MAPPO": colors1[2],
+                "MAT_mar": colors2[0],
+                "MAT_jpr": colors2[1],
+                "MAT": colors2[2]}
+
     for i, df, indicator in zip(range(len(scenarioes)), df_list, indicator_list):
         scenario = scenarioes[i]
 
@@ -217,6 +234,7 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         else:
             ax = axis[i]
         ax.set_title(scenario, fontsize=25)
+        colors = [colors_dic[algorithm] for algorithm in df["algorithm"].unique()]
         sns.lineplot(
             data=df, x="Environment steps", y=indicator, hue=hue_name, palette=colors, ax=ax, errorbar='sd'
         )
@@ -331,6 +349,6 @@ if __name__ == "__main__":
             df_list.append(df)
             indicator_list.append(indicator)
             map_name.append(scenario)
-        plots_one_row = 4
+        plots_one_row = 6
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
