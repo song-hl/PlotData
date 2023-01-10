@@ -244,7 +244,7 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         path.mkdir(parents=True, exist_ok=True)
         time_now = datetime.now().strftime("%m-%d-%H-%M-%S")
         file_name = path / f"{env_name}-sm{smooth}-{time_now}.pdf"
-        plt.savefig(file_name)
+        plt.savefig(file_name, bbox_inches='tight')
     # plt.show()
 
 
@@ -260,8 +260,8 @@ if __name__ == "__main__":
     from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
     # env_name = "StarCraft2"
-    # env_name = "mujoco"
-    env_name = "drone"
+    env_name = "mujoco"
+    # env_name = "drone"
     env = env_list[env_name]
     scenarios = [key for key in env.keys()]
     hue_name = 'algorithm'
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
                         "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                        "flock_pid": 1, "flock": 1, "leader": 1, "leader_pid": 1
+                        "flock_pid": 1, "flock": 2, "leader": 2, "leader_pid": 1
                         }
     mat_smooth_dic = defaultdict(lambda: 2)
     mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
@@ -313,12 +313,23 @@ if __name__ == "__main__":
     if FLAG_NUM == 3:
         df_list = []
         indicator_list = []
+        map_name = []
+        Algo_set1 = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+        Algo_set2 = ['MAT', 'MAT_mar', 'MAT_jpr']
         for scenario in scenarios:
             smooth = smooth_dic.get(scenario, 2)
             print(f"env: {scenario}")
-            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set1, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
+            map_name.append(scenario)
+        for scenario in scenarios:
+            smooth = smooth_dic.get(scenario, 2)
+            print(f"env: {scenario}")
+            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set2, store, save_path, smooth, smooth_method, step_lenth)
+            df_list.append(df)
+            indicator_list.append(indicator)
+            map_name.append(scenario)
         plots_one_row = 4
-        nsize = (ceil(len(scenarios) / plots_one_row), plots_one_row)
-        plot_multi_scenario(df_list, indicator_list, hue_name,env_name, scenarios, colors, nsize, smooth, save_plot, plot_path)
+        nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
+        plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
