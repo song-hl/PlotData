@@ -9,7 +9,11 @@ GRFEnv = {
             "hlsong/GRF_academy_pass_and_shoot_with_keeper/q01shxnk",
         ],
         "MAT_jpr": [
-            "hlsong/GRF_academy_pass_and_shoot_with_keeper/94jkv48c",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/kznom66n",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/6m0nsu2b",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/ahmt0h14",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/gpovorjz",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/gymg28qw",
         ],
         "MAT": [
             "hlsong/GRF_academy_pass_and_shoot_with_keeper/94jkv48c",
@@ -26,7 +30,11 @@ GRFEnv = {
             "hlsong/GRF_academy_pass_and_shoot_with_keeper/nvxl7zt4",
         ],
         "MAPPO_jpr": [
-            "hlsong/GRF_academy_pass_and_shoot_with_keeper/hy18y7o6",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/d3v3yw7j",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/wljhwykp",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/c0fb6ub9",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/umq95ot9",
+            "hlsong/GRF_academy_pass_and_shoot_with_keeper/fx18i5fx",
         ],
         "MAPPO": [
             "hlsong/GRF_academy_pass_and_shoot_with_keeper/hy18y7o6",
@@ -46,7 +54,7 @@ GRFEnv = {
             "hlsong/GRF_academy_counterattack_easy/rhmlfuyk",
         ],
         "MAT_jpr": [
-            "hlsong/GRF_academy_counterattack_easy/qaijbxs9",
+            "hlsong/GRF_academy_counterattack_easy/rhmlfuyk",
         ],
         "MAT": [
             "hlsong/GRF_academy_counterattack_easy/qaijbxs9",
@@ -81,7 +89,13 @@ GRFEnv = {
             "hlsong/GRF_academy_3_vs_1_with_keeper/qaqbfodd",
         ],
         "MAT_jpr": [
-            "hlsong/GRF_academy_3_vs_1_with_keeper/6bla4alg",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/ew82nslq",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/97c2vs84",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/ovp2xrve",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/lxop8hnl",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/gry5gape",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/ekrpvs21",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/aeq1exi2",
         ],
         "MAT": [
             "hlsong/GRF_academy_3_vs_1_with_keeper/6bla4alg",
@@ -98,7 +112,11 @@ GRFEnv = {
             "hlsong/GRF_academy_3_vs_1_with_keeper/tjyho6rp",
         ],
         "MAPPO_jpr": [
-            "hlsong/GRF_academy_3_vs_1_with_keeper/dtylvp5n",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/4ioibe49",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/5jircjcf",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/jf2xfo8r",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/qcvf2vpl",
+            "hlsong/GRF_academy_3_vs_1_with_keeper/jgzfg3a8",
         ],
         "MAPPO": [
             "hlsong/GRF_academy_3_vs_1_with_keeper/dtylvp5n",

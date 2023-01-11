@@ -103,6 +103,16 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
                     with open(file_log_path, 'a') as f:
                         f.write(run_name + '\t' + str(file_name) + '\n')
 
+            # algo name
+            if algo == "MAT_jpr":
+                history["algorithm"] = "MAJOR"
+            elif algo == "MAT_mar":
+                history["algorithm"] = "MAR"
+            elif algo == "MAPPO_jpr":
+                history["algorithm"] = "MAPPO+MAJOR"
+            elif algo == "MAPPO_mar":
+                history["algorithm"] = "MAPPO+MAR"
+
             # smooth the data
             if smooth_method == 1 and smooth > 1:
                 history["Smooth_Reward"] = history[metric_key].rolling(smooth, min_periods=1).mean()
@@ -202,12 +212,12 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     assert nsize[0] * nsize[1] >= len(scenarioes)
     sns.set_theme(
         style="darkgrid",
-        font_scale=2,
-        rc={"lines.linewidth": 3},
+        font_scale=3,
+        rc={"lines.linewidth": 6},
         # font="Tlwg Mono",
         color_codes=True,
     )
-    fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(14*nsize[1], 10*nsize[0]*1.1))
+    fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(15*nsize[1], 10*nsize[0]*1.1))
 
     colors1 = [
         sns.color_palette("husl", 9)[0],  # MAPPO_mar
@@ -219,12 +229,12 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         sns.color_palette("husl", 9)[7],  # MAT_jpr
         sns.color_palette("Set2")[0],  # MAT
     ]
-    colors_dic = {"MAPPO_mar": colors1[0],
-                "MAPPO_jpr": colors1[1],
-                "MAPPO": colors1[2],
-                "MAT_mar": colors2[0],
-                "MAT_jpr": colors2[1],
-                "MAT": colors2[2]}
+    colors_dic = {"MAPPO+MAR": colors1[0],
+                  "MAPPO+MAJOR": colors1[1],
+                  "MAPPO": colors1[2],
+                  "MAR": colors2[0],
+                  "MAJOR": colors2[1],
+                  "MAT": colors2[2]}
 
     for i, df, indicator in zip(range(len(scenarioes)), df_list, indicator_list):
         scenario = scenarioes[i]
@@ -233,46 +243,53 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
             ax = axis[i // nsize[1], i % nsize[1]]
         else:
             ax = axis[i]
-        ax.set_title(scenario, fontsize=25)
+        font = {'family': 'Times New Roman',
+                'size': 35,
+                }
+        ax.set_title(scenario, fontsize=35)
         colors = [colors_dic[algorithm] for algorithm in df["algorithm"].unique()]
         sns.lineplot(
             data=df, x="Environment steps", y=indicator, hue=hue_name, palette=colors, ax=ax, errorbar='sd'
         )
         ax.set_xlabel('')
         ax.set_ylabel('')
-        # ax.xaxis.set_ticklabels([])
-        # ax.yaxis.set_ticklabels([])
-        
+        # ax.xticks(fontsize=30)
+        # ax.yticks(fontsize=30)
+
         # ax.xaxis.set_major_locator(MultipleLocator(250000))
         ax.get_legend().set_visible(False)
+        if scenario == "LeaderFollower_PID":
+            ax.axhline(y=-10, color='black', linestyle='--', linewidth=2)
     # set labels
     if len(axis.shape) > 1:
         for ax in axis[-1, :]:
-            ax.set_xlabel('Environment steps', labelpad=10)
+            ax.set_xlabel('Environment steps', labelpad=10, fontsize=35)
         for ax in axis[:, 0]:
-            ax.set_ylabel('Reward', labelpad=10)
+            ax.set_ylabel('Reward', labelpad=10, fontsize=35)
     else:
         for ax in axis:
-            ax.set_xlabel('Environment steps', labelpad=10)
-        axis[0].set_ylabel('Reward', labelpad=10)
+            ax.set_xlabel('Environment steps', labelpad=10, fontsize=35)
+        axis[0].set_ylabel('Reward', labelpad=10, fontsize=35)
 
     # 主图加label
     line_mat, label_mat = axis[0, 0].get_legend_handles_labels() if len(axis.shape) > 1 else axis[0].get_legend_handles_labels()
-    line_mapppo, label_mapppo = axis[-1, -1].get_legend_handles_labels() if len(axis.shape) > 1 else axis[-1].get_legend_handles_labels()
-    lines = line_mat + line_mapppo
-    labels = label_mat + label_mapppo
-    if axis.shape[0] == 1:
-        anchor = (0.5, -0.1)
+    # line_mapppo, label_mapppo = axis[-1, -1].get_legend_handles_labels() if len(axis.shape) > 1 else axis[-1].get_legend_handles_labels()
+    # lines = line_mat + line_mapppo
+    # labels = label_mat + label_mapppo
+    lines = line_mat
+    labels = label_mat
+    if len(axis.shape) == 1:
+        anchor = (0.5, -0.18)
     elif axis.shape[0] == 2:
         anchor = (0.5, 0)
     elif axis.shape[0] == 4:
         anchor = (0.5, 0.05)
     else:
         anchor = (0.5, 0)
-    # fig.legend(loc='lower center', ncol=6, handles=lines, labels=labels, labelspacing=0.1, fontsize=35, bbox_to_anchor=anchor)
+    # fig.legend(loc='lower center', ncol=6, handles=lines, labels=labels, labelspacing=0.1, fontsize=45, bbox_to_anchor=anchor)
 
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20)
+    # plt.xticks(fontsize=20)
+    # plt.yticks(fontsize=20)
     if save == True:
         path = Path(save_path) / env_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name
         path.mkdir(parents=True, exist_ok=True)
@@ -294,26 +311,29 @@ if __name__ == "__main__":
     from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
     env_name = "StarCraft2"
+    scenarios = ["3s_vs_5z", "5m_vs_6m", "3s5z_vs_3s6z", "10m_vs_11m"]
     # env_name = "mujoco"
     # env_name = "drone"
     # env_name = "football"
     env = env_list[env_name]
-    scenarios = [key for key in env.keys()]
+    # scenarios = [key for key in env.keys()]
     hue_name = 'algorithm'
     FLAG_NUM = 3
 
     # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
     # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
     Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
-    
+
     mappo_smooth_dic = defaultdict(lambda: 2)
     mappo_smooth_dic = {'ant_4x2': 6, 'ant_8x1': 6, 'walker_6x1': 4, 'walker_3x2': 4,
                         "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                        "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1
+                        "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
+                        "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
                         }
     mat_smooth_dic = defaultdict(lambda: 2)
     mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                      "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1
+                      "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
+                      "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
                       }
     smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
 
@@ -352,17 +372,17 @@ if __name__ == "__main__":
         Algo_set1 = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
         Algo_set2 = ['MAT', 'MAT_mar', 'MAT_jpr']
         Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
-        for scenario in scenarios:
-            smooth = smooth_dic.get(scenario, 2)
-            if scenario == 'Flock_RPM' or scenario == 'LeaderFollower_RPM':
-                continue
-            if scenario == 'walker_3x2' or scenario == 'half_3x2':
-                continue
-            print(f"env: {scenario}")
-            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set1, store, save_path, smooth, smooth_method, step_lenth)
-            df_list.append(df)
-            indicator_list.append(indicator)
-            map_name.append(scenario)
+        # for scenario in scenarios:
+        #     smooth = smooth_dic.get(scenario, 2)
+        #     if scenario == 'Flock_RPM' or scenario == 'LeaderFollower_RPM':
+        #         continue
+        #     if scenario == 'walker_3x2' or scenario == 'half_3x2':
+        #         continue
+        #     print(f"env: {scenario}")
+        #     df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set1, store, save_path, smooth, smooth_method, step_lenth)
+        #     df_list.append(df)
+        #     indicator_list.append(indicator)
+        #     map_name.append(scenario)
         for scenario in scenarios:
             if scenario == 'walker_3x2' or scenario == 'half_3x2':
                 continue
@@ -372,7 +392,7 @@ if __name__ == "__main__":
             df_list.append(df)
             indicator_list.append(indicator)
             map_name.append(scenario)
-        
+
         # PLOT SIX ALGORTHM
         # for scenario in scenarios:
         #     if scenario == 'walker_3x2' or scenario == 'half_3x2':
@@ -383,6 +403,6 @@ if __name__ == "__main__":
         #     df_list.append(df)
         #     indicator_list.append(indicator)
         #     map_name.append(scenario)
-        plots_one_row = 6
+        plots_one_row = 4
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
