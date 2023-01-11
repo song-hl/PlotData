@@ -1,5 +1,5 @@
 MujocoEnv = {
-    "ant_4x2": {
+    "4x2-Agent Ant": {
         "MAT_mar": [
             "hlsong/mujoco_ant_4x2/oslr540g",
             "hlsong/mujoco_ant_4x2/rseibk6y",
@@ -44,7 +44,7 @@ MujocoEnv = {
             "hlsong/mujoco_ant_4x2/pi0xk37a",
         ],
     },
-    "ant_8x1": {
+    "8x1-Agent Ant": {
         "MAT_mar": [
             "hlsong/mujoco_ant_8x1/ckchag94",
             "hlsong/mujoco_ant_8x1/17vw6bhf",
@@ -84,7 +84,7 @@ MujocoEnv = {
             "hlsong/mujoco_ant_8x1/y0iqsy1v",
         ],
     },
-    "half_6x1": {
+    "6x1-Agent HalfCheetah": {
         "MAT_mar": [
             "hlsong/mujoco_half_6x1/opn8up26",
             "hlsong/mujoco_half_6x1/zvx57y67",
@@ -130,7 +130,7 @@ MujocoEnv = {
             "hlsong/mujoco_half_6x1/lr075x9t",
         ],
     },
-    "half_3x2": {
+    "3x2-Agent HalfCheetah": {
         "MAT_mar": [
             "hlsong/mujoco_half_3x2/oz0zsrxb",
             "hlsong/mujoco_half_3x2/c0mew7s6",
@@ -168,7 +168,7 @@ MujocoEnv = {
             "hlsong/mujoco_half_3x2/92yczzsz",
         ],
     },
-    "hopper_3x1": {
+    "3x1-Agent Hopper": {
         "MAT_mar": [
             "hlsong/mujoco_hopper_3x1/yi7ngrag",
             "hlsong/mujoco_hopper_3x1/wtet5c6u",
@@ -211,7 +211,7 @@ MujocoEnv = {
             "hlsong/mujoco_hopper_3x1/r9y37xnu",
         ],
     },
-    "swimmer_10x2": {
+    "10x2-Agent swimmer": {
         "MAT_mar": [
             "hlsong/mujoco_swimmer_10x2/r57vh87z",
             "hlsong/mujoco_swimmer_10x2/x4c4jgth",
@@ -254,7 +254,7 @@ MujocoEnv = {
             "hlsong/mujoco_swimmer_10x2/bp2gvo3w",
         ],
     },
-    "walker-6x1": {
+    "6x1-Agent walker": {
         "MAT_mar": [
             "hlsong/mujoco_walker-6x1/we8d3313",
             "hlsong/mujoco_walker-6x1/y1ciyt0g",
@@ -293,7 +293,7 @@ MujocoEnv = {
             "hlsong/mujoco_walker-6x1/cwkw2kjr",
         ],
     },
-    "walker_3x2": {
+    "3x2-Agent walker": {
         "MAT_mar": [
             "hlsong/mujoco_walker_3x2/idlxeo5x",
             "hlsong/mujoco_walker_3x2/rrlg9183",
