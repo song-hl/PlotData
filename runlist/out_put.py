@@ -21,16 +21,27 @@ if __name__ == "__main__":
     # var_name = "MujocoEnv"
     # map_names = ["ant_4x2", "ant_8x1", "half_6x1", "half_3x2", "hopper_3x1", "swimmer_10x2", "walker-6x1", "walker_3x2"]
 
-    # env_name = "Drones"
-    # var_name = "DroneEnv"
-    # map_names = ["flock", "flock_pid", "leader", "leader_pid"]
+    env_name = "Drones"
+    var_name = "DroneEnv"
+    map_names = ["flock", "flock_pid", "leader", "leader_pid"]
+    map_names = ["flock"]
 
-    env_name = "GRF"
-    var_name = "GRFEnv"
-    map_names = ["academy_pass_and_shoot_with_keeper", "academy_counterattack_easy", "academy_3_vs_1_with_keeper"]
+    # env_name = "GRF"
+    # var_name = "GRFEnv"
+    # map_names = ["academy_pass_and_shoot_with_keeper", "academy_counterattack_easy", "academy_3_vs_1_with_keeper"]
     update = True
+    ablation = True
+    ablation_name = "mask_agent_num"
+    wandb_tag = ["ablation_cpu","ablation"]
+    order_value = ["1", "2", "3", "4"]
 
-    save_path = Path(f"./runlist/{env_name}.py")
+    if ablation is True:
+        file_name = f"{env_name}_AblationT.py"
+        var_name = f"{var_name}_{ablation_name}"
+    else:
+        file_name = f"{env_name}.py"
+
+    save_path = Path(f"./runlist/{file_name}")
     save_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(str(save_path), "w+") as fw:
@@ -45,24 +56,39 @@ if __name__ == "__main__":
         algo_name = {'mat_mask': "MAT_mar", 'mat_jpr': "MAT_jpr", 'mat': "MAT", 'mappo_maska': "MAPPO_mar", 'mappo_jpr': "MAPPO_jpr", 'mappo': "MAPPO"}
 
         for run in runs:
-            if run.state != "finished":
-                continue
-            algo = run.config["algorithm_name"]
-            # if run.config["wandb_tag"] != "plot":
-            #     run.config["wandb_note"] = "plot"
-            #     run.config["wandb_tag"] = "plot"
-            #     run.update()
-            dic[algo].append(run.id)
+            # if run.state != "finished":
+            #     continue
+            if ablation:
+                if run.config["wandb_tag"] in wandb_tag:
+                    setting = run.config[ablation_name]
+                    dic[str(setting)].append(run.id)
+            else:
+                algo = run.config["algorithm_name"]
+                # if run.config["wandb_tag"] != "plot":
+                #     run.config["wandb_note"] = "plot"
+                #     run.config["wandb_tag"] = "plot"
+                #     run.update()
+                dic[algo].append(run.id)
         # save_path = Path(f"./runlist/{env_name}_{map_name}.txt")
         # save_path.parent.mkdir(parents=True, exist_ok=True)
         # with open(f"{str(save_path)}", "w") as fw:
-        with open(str(save_path), "a+") as fw:
-            print(" "*4+f"\"{map_name}\": {{", file=fw)
-            for key in order_key:
-                print(" "*8+f"\"{algo_name[key]}\": [", file=fw)
-                for run in dic[key]:
-                    print(" "*12+f"\"{project}/{run}\",", file=fw)
-                print(" "*8+"],", file=fw)
-            print(" "*4+"},", file=fw)
+        if ablation:
+            with open(str(save_path), "a+") as fw:
+                print(" "*4+f"\"{ablation_name}\": {{", file=fw)
+                for key in order_value:
+                    print(" "*8+f"\"{key}\": [", file=fw)
+                    for run in dic[key]:
+                        print(" "*12+f"\"{project}/{run}\",", file=fw)
+                    print(" "*8+"],", file=fw)
+                print(" "*4+"},", file=fw)
+        else:   
+            with open(str(save_path), "a+") as fw:
+                print(" "*4+f"\"{map_name}\": {{", file=fw)
+                for key in order_key:
+                    print(" "*8+f"\"{algo_name[key]}\": [", file=fw)
+                    for run in dic[key]:
+                        print(" "*12+f"\"{project}/{run}\",", file=fw)
+                    print(" "*8+"],", file=fw)
+                print(" "*4+"},", file=fw)
     with open(str(save_path), "a+") as fw:
         print(f"}}", file=fw)

@@ -2,6 +2,7 @@ from .mujoco import MujocoEnv
 from .SMAC import SMACEnv
 from .Drones import DroneEnv
 from .GRF import GRFEnv
+from .Drones_Ablation import DroneEnv_Albation
 def envlist():
     # MujocoEnv = {
     #     "ant_4x2": {
@@ -763,7 +764,7 @@ def envlist():
     #     },
 
     # }
-    env_list = {"mujoco": MujocoEnv, "StarCraft2": SMACEnv, "drone": DroneEnv, "football": GRFEnv}
+    env_list = {"mujoco": MujocoEnv, "StarCraft2": SMACEnv, "drone": DroneEnv, "football": GRFEnv , "drone_ablation": DroneEnv_Albation, }
     return env_list
 
 
