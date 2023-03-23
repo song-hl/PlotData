@@ -9,9 +9,9 @@ import matplotlib as mpl
 from matplotlib.pyplot import MultipleLocator
 api = wandb.Api(timeout=19)
 
-project = "hlsong/mujoco_ant_4x2"
+project = "hlsong/SMAC_27m_vs_30m"
 # runs = api.runs(project , {"$and": [{"config.algorithm_name": 'mat'},]})
-runs = api.runs(project, {"$and": [{"config.algorithm_name": 'mat_mask'}, ]}, order="-created_at")
+runs = api.runs(project, {"$and": [{"config.algorithm_name": 'mat'}, ]}, order="-created_at")
 
 for run in runs:
     config = {k: v for k, v in run.config.items() if not k.startswith('_')}
