@@ -1,6 +1,8 @@
 import pandas as pd
 import wandb
 from pathlib import Path
+import hydra
+from omegaconf import DictConfig, OmegaConf
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -311,17 +313,22 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     # plt.show()
 
 
-if __name__ == "__main__":
-    store = True                # 是否存储数据
-    save_path = './data'        # 数据存储路径
-    step_lenth = None
-    smooth = 2
-    smooth_method = 2
-    save_plot = True
-    plot_path = './plot_result'
+@hydra.main(
+    config_name="config",
+    config_path="./conf",
+)
+def main(cfg : DictConfig):
+    OmegaConf.set_struct(cfg, False)
+    store = True                 # 是否存储数据
+    save_path = './data'         # 数据存储路径
+    step_lenth = None            # 数据横坐标长度
+    smooth = 2                   # 数据平滑窗口长度
+    smooth_method = 2            # 数据平滑方法
+    save_plot = True             # 是否存储图片
+    plot_path = './plot_result'  # 图片存储路径
 
-    from runlist.add_enlist import envlist as ENVLISTa
-    env_list = ENVLISTa()
+    from runlist.add_enlist import envlist as ENVLIST
+    env_list = ENVLIST()
 
     # NOTE 选择需要画图的环境和地图
 
@@ -432,3 +439,7 @@ if __name__ == "__main__":
         plots_one_row = 3
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
+
+
+if __name__ == "__main__":
+    main()
