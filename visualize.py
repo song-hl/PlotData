@@ -213,14 +213,12 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     sns.set_theme(
         style="darkgrid",
         # font_scale=4,  # MAPPO
-        font_scale=3.5,  # MAT
+        font_scale=6,  # MAT
         rc={"lines.linewidth": 5},
-        # font="Tlwg Mono",
         color_codes=True,
     )
-    # font_size = 50  # MAPPO
-    font_size = 40  # MAT
-    fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(15*nsize[1], 10*nsize[0]*1.1))
+    font_size = 70
+    fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(18*nsize[1], 10*nsize[0]*1.1))
 
     colors1 = [
         sns.color_palette("husl", 9)[0],  # MAPPO_mar
@@ -246,10 +244,8 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
             ax = axis[i // nsize[1], i % nsize[1]]
         else:
             ax = axis[i]
-        font = {'family': 'Times New Roman',
-                'size': 35,
-                }
-        ax.set_title(scenario, fontsize=font_size)
+
+        ax.set_title(scenario, fontsize=80)
         if "MAPPO" in df["algorithm"].unique():
             hue_order = ["MAPPO", "MAPPO+MAJOR", "MAPPO+MA2CL"]
 
@@ -261,16 +257,14 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         )
         ax.set_xlabel('')
         ax.set_ylabel('')
-        # ax.xticks(fontsize=30)
-        # ax.yticks(fontsize=30)
 
         # ax.xaxis.set_major_locator(MultipleLocator(250000))
         ax.get_legend().set_visible(False)
         line, label = ax.get_legend_handles_labels()
         orders = [2, 1, 0]
-        mini_line = [line[i] for i in orders]
-        mini_label = [label[i] for i in orders]
-        ax.legend(loc=0, fontsize=30, handles=mini_line, labels=mini_label)
+        # mini_line = [line[i] for i in orders]
+        # mini_label = [label[i] for i in orders]
+        # ax.legend(loc=4, fontsize=45, handles=mini_line, labels=mini_label)
         # if scenario == "LeaderFollower_PID":
         #     ax.axhline(y=-10, color='black', linestyle='--', linewidth=2)
     # set labels
@@ -278,14 +272,14 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         for ax in axis[-1, :]:
             ax.set_xlabel('Environment steps', labelpad=10, fontsize=font_size)
         for ax in axis[:, 0]:
-            ax.set_ylabel('Episode Reward', labelpad=10, fontsize=font_size)
+            ax.set_ylabel('Episode Reward', labelpad=10, fontsize=65)
             # ax.set_ylabel('Win Rate', labelpad=10, fontsize=font_size)
     else:
         for ax in axis:
-            ax.set_xlabel('Environment steps', labelpad=10, fontsize=font_size)
+            ax.set_xlabel('Environment steps', labelpad=10, fontsize=65)
         # axis[0].set_ylabel('Reward', labelpad=10, fontsize=font_size)
-        axis[0].set_ylabel('Episode Reward', labelpad=10, fontsize=font_size)
-        # axis[0].set_ylabel('Win Rate', labelpad=10, fontsize=font_size)
+        axis[0].set_ylabel('Episode Reward', labelpad=10, fontsize=80)
+        # axis[0].set_ylabel('Win Rate', labelpad=10, fontsize=80)
 
     # 主图加label
     line_mat, label_mat = axis[0, 0].get_legend_handles_labels() if len(axis.shape) > 1 else axis[0].get_legend_handles_labels()
@@ -295,7 +289,7 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     lines = line_mat
     labels = label_mat
     if len(axis.shape) == 1:
-        anchor = (0.5, -0.2)
+        anchor = (0.5, -0.3)
         # anchor = (0.5, -0.18)
     elif axis.shape[0] == 2:
         anchor = (0.5, -0.04)
@@ -306,10 +300,8 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     orders = [2, 1, 0]
     main_lines = [lines[i] for i in orders]
     main_labels = [labels[i] for i in orders]
-    # fig.legend(loc='lower center', ncol=6, handles=main_lines, labels=main_labels, labelspacing=0.1, fontsize=55, bbox_to_anchor=anchor)
+    # fig.legend(loc='lower center', ncol=6, handles=main_lines, labels=main_labels, labelspacing=0.1, fontsize=70, bbox_to_anchor=anchor, )
 
-    # plt.xticks(fontsize=20)
-    # plt.yticks(fontsize=20)
     if save == True:
         path = Path(save_path) / env_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name
         path.mkdir(parents=True, exist_ok=True)
@@ -320,8 +312,8 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
 
 
 if __name__ == "__main__":
-    store = True
-    save_path = './data'
+    store = True                # 是否存储数据
+    save_path = './data'        # 数据存储路径
     step_lenth = None
     smooth = 2
     smooth_method = 2
@@ -331,20 +323,22 @@ if __name__ == "__main__":
     from runlist.add_enlist import envlist as ENVLISTa
     env_list = ENVLISTa()
 
+    # NOTE 选择需要画图的环境和地图
+
     # env_name = "StarCraft2"
     # scenarios = ["1c3s5z", "3s_vs_5z", "5m_vs_6m", "3s5z_vs_3s6z", "10m_vs_11m"]  # mat
     # scenarios = ["1c3s5z", "3s_vs_5z", "8m_vs_9m", "3s5z_vs_3s6z", "10m_vs_11m", "mmm2"]  # mappo
     # scenarios = ["1c3s5z", "10m_vs_11m", "mmm2"]  # mappo
     # env_name = "mujoco"
-    # scenarios = ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper", "6x1-Agent walker","10x2-Agent swimmer",]
+    # scenarios = ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper", "6x1-Agent walker", "10x2-Agent swimmer",]
     # scenarios = ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper"]  # mappo
     env_name = "drone"
     # scenarios = ["Flock_RPM", "Flock_PID", "LeaderFollower_RPM", "LeaderFollower_PID"]
-    # scenarios = ["Flock_PID", "LeaderFollower_PID", "Flock_RPM"]
+    scenarios = ["Flock_PID", "LeaderFollower_PID", "Flock_RPM"]
     # scenario =
     # env_name = "football"
     env = env_list[env_name]
-    scenarios = [key for key in env.keys()]
+    # scenarios = [key for key in env.keys()]
 
     hue_name = 'algorithm'
     FLAG_NUM = 3
@@ -435,6 +429,6 @@ if __name__ == "__main__":
         #     df_list.append(df)
         #     indicator_list.append(indicator)
         #     map_name.append(scenario)
-        plots_one_row = 4
+        plots_one_row = 3
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
