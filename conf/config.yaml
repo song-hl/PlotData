@@ -1,7 +1,42 @@
-    store : True                 # 是否存储数据
-    save_path : './data'         # 数据存储路径
-    step_lenth : None            # 数据横坐标长度
-    smooth : 2                   # 数据平滑窗口长度
-    smooth_method : 2            # 数据平滑方法
-    save_plot : True             # 是否存储图片
-    plot_path : './plot_result'  # 图片存储路径
+defaults:
+    - scenarios:
+        - StarCraft2
+        - drone
+        - mujoco
+    - smooth:
+        - mat
+        - mappo
+
+algo: mat
+env_name: drone
+
+store : True                        # 是否存储数据
+save_path : './data'                # 数据存储路径
+step_lenth : None                   # 数据横坐标长度
+save_plot : True                    # 是否存储图片
+plot_path : './plot_result'         # 图片存储路径
+plot_all: False                     # 是否绘制所有图像
+smooth_length : 2                   # 数据平滑窗口长度
+smooth_method : 2                   # 数据平滑方法
+
+Algo_Set:                          
+    mat: ['MAT', 'MAT_mar', 'MAT_jpr']
+    mappo: ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
+    all: ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
+
+_scenarios: ${scenarios.${env_name}.${algo}}    #地图
+skip_scenarios: ['walker_3x2','half_3x2']       #跳过的地图
+algo_set: ${Algo_Set.${algo}}                   #算法
+smooth_dic: ${smooth.${algo}}                   #平滑参数
+
+
+hue_name: algorithm                             #聚类标签
+color:                                          #颜色
+    palette: husl
+    cls: 9
+    index: [0,6,7]
+
+
+hydra:
+    job:
+        chdir: False

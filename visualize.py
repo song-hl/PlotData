@@ -43,6 +43,7 @@ def export_run_name():
 def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='./', smooth=1, smooth_method=2, step_lenth=None):
     df_list = []
     # print(f" - scenario:{scenario}")
+
     # 读取本地数据列表
     file_log_name = 'file_list.txt'
     file_log_path = Path(save_path) / env_name / scenario / file_log_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name / scenario / file_log_name
@@ -317,98 +318,85 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
     config_name="config",
     config_path="./conf",
 )
-def main(cfg : DictConfig):
+def main(cfg: DictConfig):
     OmegaConf.set_struct(cfg, False)
-    store = True                 # 是否存储数据
-    save_path = './data'         # 数据存储路径
-    step_lenth = None            # 数据横坐标长度
-    smooth = 2                   # 数据平滑窗口长度
-    smooth_method = 2            # 数据平滑方法
-    save_plot = True             # 是否存储图片
-    plot_path = './plot_result'  # 图片存储路径
+    store = cfg.store
+    save_path = cfg.save_path
+    step_lenth = cfg.step_lenth
+    smooth = cfg.smooth_length
+    smooth_method = cfg.smooth_method
+    save_plot = cfg.save_plot
+    plot_path = cfg.plot_path
 
     from runlist.add_enlist import envlist as ENVLIST
     env_list = ENVLIST()
 
     # NOTE 选择需要画图的环境和地图
 
-    # env_name = "StarCraft2"
-    # scenarios = ["1c3s5z", "3s_vs_5z", "5m_vs_6m", "3s5z_vs_3s6z", "10m_vs_11m"]  # mat
-    # scenarios = ["1c3s5z", "3s_vs_5z", "8m_vs_9m", "3s5z_vs_3s6z", "10m_vs_11m", "mmm2"]  # mappo
-    # scenarios = ["1c3s5z", "10m_vs_11m", "mmm2"]  # mappo
-    # env_name = "mujoco"
-    # scenarios = ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper", "6x1-Agent walker", "10x2-Agent swimmer",]
-    # scenarios = ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper"]  # mappo
-    env_name = "drone"
-    # scenarios = ["Flock_RPM", "Flock_PID", "LeaderFollower_RPM", "LeaderFollower_PID"]
-    scenarios = ["Flock_PID", "LeaderFollower_PID", "Flock_RPM"]
-    # scenario =
-    # env_name = "football"
+    env_name = cfg.env_name
     env = env_list[env_name]
-    # scenarios = [key for key in env.keys()]
-
-    hue_name = 'algorithm'
+    if cfg.plot_all:
+        scenarios = [key for key in env.keys()]
+    else:
+        scenarios = cfg._scenarios
+    hue_name = cfg.hue_name
     FLAG_NUM = 3
-
-    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
-    # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
-    Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
-
-    mappo_smooth_dic = defaultdict(lambda: 2)
-    mappo_smooth_dic = {'ant_4x2': 6, '8x1-Agent Ant': 4, 'walker_6x1': 4, 'walker_3x2': 4,
-                        "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                        "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
-                        "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
-                        }
-    mat_smooth_dic = defaultdict(lambda: 2)
-    mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-                      "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
-                      "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
-                      }
-    smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
-
-    if len(Algo_set) == 3:
-        colors = [
-            sns.color_palette("husl", 9)[0],
-            sns.color_palette("husl", 9)[6],
-            sns.color_palette("husl", 9)[7],
-        ]
-    elif len(Algo_set) == 6:
-        colors = [
-            sns.color_palette("husl", 9)[0],  # SOTA
-            sns.color_palette("husl", 9)[1],
-            sns.color_palette("husl", 9)[6],  # MAPPO / MAT (baseline)
-            sns.color_palette("husl", 9)[7],
-            sns.color_palette("husl", 9)[5],
-            sns.color_palette("husl", 9)[3],
-        ]
+    Algo_set = cfg.algo_set
+    
+    # mappo_smooth_dic = defaultdict(lambda: 2)
+    # mappo_smooth_dic = {'ant_4x2': 6, '8x1-Agent Ant': 4, 'walker_6x1': 4, 'walker_3x2': 4,
+    #                     "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
+    #                     "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
+    #                     "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
+    #                     }
+    # mat_smooth_dic = defaultdict(lambda: 2)
+    # mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
+    #                   "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
+    #                   "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
+    #                   }
+    # smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
+    smooth_dic = cfg.smooth_dic
+    color_config = cfg.color
+    
+    # if len(Algo_set) == 3:
+    #     colors = [
+    #         sns.color_palette("husl", 9)[0],
+    #         sns.color_palette("husl", 9)[6],
+    #         sns.color_palette("husl", 9)[7],
+    #     ]
+    # elif len(Algo_set) == 6:
+    #     colors = [
+    #         sns.color_palette("husl", 9)[0],  # SOTA
+    #         sns.color_palette("husl", 9)[1],
+    #         sns.color_palette("husl", 9)[6],  # MAPPO / MAT (baseline)
+    #         sns.color_palette("husl", 9)[7],
+    #         sns.color_palette("husl", 9)[5],
+    #         sns.color_palette("husl", 9)[3],
+        # ]
+    colors = [sns.color_palette(color_config.palette, color_config.cls)[i] for i in color_config.index]
 
     if FLAG_NUM == 1:
+        # 只画一个图
         scenario = '5m_vs_6m'
         print(f"env: {env_name}")
         smooth = smooth_dic.get(scenario, 2)
         df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
         plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
     if FLAG_NUM == 2:
+        # 画多个单图
         for scenario in scenarios:
             print(f"env: {scenario}")
             smooth = smooth_dic.get(scenario, 2)
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
             plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
     if FLAG_NUM == 3:
+        # 画一个多图
         df_list = []
         indicator_list = []
         map_name = []
-        Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
-        # Algo_set = ['MAT', 'MAT_mar', 'MAT_jpr']
-        # Algo_set = ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
         for scenario in scenarios:
-            smooth = mappo_smooth_dic.get(scenario, 2)
-            # if scenario == 'Flock_RPM' or scenario == 'LeaderFollower_RPM':
-            # if scenario == 'Flock_RPM':
-            # if scenario == 'LeaderFollower_RPM':
-            #     continue
-            if scenario == 'walker_3x2' or scenario == 'half_3x2':
+            smooth = smooth_dic.get(scenario, 2)
+            if scenario in cfg.skip_scenarios:
                 continue
             print(f"env: {scenario}")
             df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
