@@ -3,3 +3,5 @@ mujoco:
   metric_key: 'eval_average_episode_rewards'
   mat: ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper", "6x1-Agent walker", "10x2-Agent swimmer",]
   mappo: ["8x1-Agent Ant", "3x2-Agent HalfCheetah", "3x1-Agent Hopper"]
+  xlabel: Environment steps
+  ylabel: Episode Reward

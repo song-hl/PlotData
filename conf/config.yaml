@@ -45,6 +45,20 @@ data:
     local_metric_key: Reward
     smooth_metric_key: Smooth_Reward
 
+plot_cfg:
+    font_scale: 6
+    linewidth: 5
+    font_size: 70
+    figure_size: [18, 10]
+    hue_order:
+        mappo: ["MAPPO", "MAPPO+MAJOR", "MAPPO+MA2CL"]
+        mat: ["MAT", "MAJOR", "MA2CL"]
+    legend_order: [2,1,0]
+    xlabel: ${envs.${env_name}.xlabel} 
+    ylabel: ${envs.${env_name}.ylabel} 
+    main_labels_anchor: {1: (0.5, -0.3),2: (0.5, -0.04), 3: (0.5, 0.05)}
+
+
 hydra:
     job:
         chdir: False

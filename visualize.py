@@ -198,35 +198,29 @@ def plot_one_scenario(df, indicator, hue_name, env_name, scenario, colors, smoot
     # plt.show()
 
 
-def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes, colors, nsize, smooth=1, save=False, save_path='./plot_result'):
+def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes, colors, nsize, cfg, smooth=1, save=False, save_path='./plot_result'):
     assert nsize[0] * nsize[1] >= len(scenarioes)
+    # 设置图的风格
     sns.set_theme(
         style="darkgrid",
-        # font_scale=4,  # MAPPO
-        font_scale=6,  # MAT
-        rc={"lines.linewidth": 5},
+        font_scale=cfg.plot_cfg.font_scale,
+        rc={"lines.linewidth": cfg.plot_cfg.linewidth},
         color_codes=True,
     )
-    font_size = 70
-    fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(18*nsize[1], 10*nsize[0]*1.1))
+    # cfg
+    font_size = cfg.plot_cfg.font_size
+    
+    # 生成图列表
+    fig, axis = plt.subplots(nrows=nsize[0], ncols=nsize[1], figsize=(cfg.plot_cfg.figure_size[0]*nsize[1], cfg.plot_cfg.figure_size[1]*nsize[0]*1.1))
 
-    colors1 = [
-        sns.color_palette("husl", 9)[0],  # MAPPO_mar
-        sns.color_palette("husl", 9)[6],  # MAPPO_jpr
-        sns.color_palette("Set2")[6],  # MAPPO
-    ]
-    colors2 = [
-        sns.color_palette("Set2")[1],  # MAT_mar
-        sns.color_palette("husl", 9)[7],  # MAT_jpr
-        sns.color_palette("Set2")[0],  # MAT
-    ]
-    colors_dic = {"MAPPO+MA2CL": colors1[0],
-                  "MAPPO+MAJOR": colors1[1],
-                  "MAPPO": colors1[2],
-                  "MA2CL": colors2[0],
-                  "MAJOR": colors2[1],
-                  "MAT": colors2[2]}
+    colors_dic = {"MAPPO+MA2CL": sns.color_palette("husl", 9)[0],
+                  "MAPPO+MAJOR": sns.color_palette("husl", 9)[6],
+                  "MAPPO": sns.color_palette("Set2")[6],
+                  "MA2CL": sns.color_palette("Set2")[1],
+                  "MAJOR": sns.color_palette("husl", 9)[7],
+                  "MAT": sns.color_palette("Set2")[0]}
 
+    # 画子图
     for i, df, indicator in zip(range(len(scenarioes)), df_list, indicator_list):
         scenario = scenarioes[i]
 
@@ -234,63 +228,49 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
             ax = axis[i // nsize[1], i % nsize[1]]
         else:
             ax = axis[i]
+        # title
+        ax.set_title(scenario, fontsize=font_size)
+        # 画图顺序
+        hue_order = cfg.plot_cfg.hue_order[cfg.algo]
 
-        ax.set_title(scenario, fontsize=80)
-        if "MAPPO" in df["algorithm"].unique():
-            hue_order = ["MAPPO", "MAPPO+MAJOR", "MAPPO+MA2CL"]
-
-        elif "MAT" in df["algorithm"].unique():
-            hue_order = ["MAT", "MAJOR", "MA2CL"]
+        # 颜色
         colors = [colors_dic[algorithm] for algorithm in hue_order]
+        
+        # 画线
         sns.lineplot(
-            data=df, x="Environment steps", y=indicator, hue=hue_name, palette=colors, ax=ax, errorbar='sd', hue_order=hue_order
+            data=df, x=cfg.data.local_step, y=indicator, hue=cfg.hue_name, palette=colors, ax=ax, errorbar='sd', hue_order=hue_order
         )
+        # 取消子图label
         ax.set_xlabel('')
         ax.set_ylabel('')
 
         # ax.xaxis.set_major_locator(MultipleLocator(250000))
-        ax.get_legend().set_visible(False)
+
+        ax.get_legend().set_visible(False)  #
+
+        # 子图中的legend
         line, label = ax.get_legend_handles_labels()
-        orders = [2, 1, 0]
-        # mini_line = [line[i] for i in orders]
-        # mini_label = [label[i] for i in orders]
-        # ax.legend(loc=4, fontsize=45, handles=mini_line, labels=mini_label)
-        # if scenario == "LeaderFollower_PID":
-        #     ax.axhline(y=-10, color='black', linestyle='--', linewidth=2)
+        orders = cfg.plot_cfg.legend_order  # legend 顺序
+        ax.legend(loc=0, fontsize=45, handles=[line[i] for i in orders], labels=[label[i] for i in orders])
+
     # set labels
     if len(axis.shape) > 1:
         for ax in axis[-1, :]:
-            ax.set_xlabel('Environment steps', labelpad=10, fontsize=font_size)
+            ax.set_xlabel(cfg.plot_cfg.xlabel, labelpad=10, fontsize=font_size)
         for ax in axis[:, 0]:
-            ax.set_ylabel('Episode Reward', labelpad=10, fontsize=65)
-            # ax.set_ylabel('Win Rate', labelpad=10, fontsize=font_size)
+            ax.set_ylabel(cfg.plot_cfg.ylabel, labelpad=10, fontsize=font_size)
     else:
         for ax in axis:
-            ax.set_xlabel('Environment steps', labelpad=10, fontsize=65)
-        # axis[0].set_ylabel('Reward', labelpad=10, fontsize=font_size)
-        axis[0].set_ylabel('Episode Reward', labelpad=10, fontsize=80)
-        # axis[0].set_ylabel('Win Rate', labelpad=10, fontsize=80)
+            ax.set_xlabel(cfg.plot_cfg.xlabel, labelpad=10, fontsize=font_size)
+        axis[0].set_ylabel(cfg.plot_cfg.ylabel, labelpad=10, fontsize=font_size)
 
     # 主图加label
-    line_mat, label_mat = axis[0, 0].get_legend_handles_labels() if len(axis.shape) > 1 else axis[0].get_legend_handles_labels()
-    # line_mapppo, label_mapppo = axis[-1, -1].get_legend_handles_labels() if len(axis.shape) > 1 else axis[-1].get_legend_handles_labels()
-    # lines = line_mat + line_mapppo
-    # labels = label_mat + label_mapppo
-    lines = line_mat
-    labels = label_mat
-    if len(axis.shape) == 1:
-        anchor = (0.5, -0.3)
-        # anchor = (0.5, -0.18)
-    elif axis.shape[0] == 2:
-        anchor = (0.5, -0.04)
-    elif axis.shape[0] == 4:
-        anchor = (0.5, 0.05)
-    else:
-        anchor = (0.5, 0)
-    orders = [2, 1, 0]
+    lines, labels = axis[0, 0].get_legend_handles_labels() if len(axis.shape) > 1 else axis[0].get_legend_handles_labels()
     main_lines = [lines[i] for i in orders]
     main_labels = [labels[i] for i in orders]
-    # fig.legend(loc='lower center', ncol=6, handles=main_lines, labels=main_labels, labelspacing=0.1, fontsize=70, bbox_to_anchor=anchor, )
+    anchor = cfg.plot_cfg.main_labels_anchor.get(axis.shape, (0.5, 0))
+
+    fig.legend(loc='lower center', ncol=6, handles=main_lines, labels=main_labels, labelspacing=0.1, fontsize=font_size, bbox_to_anchor=anchor, )
 
     if save == True:
         path = Path(save_path) / env_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name
@@ -298,7 +278,6 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
         time_now = datetime.now().strftime("%m-%d-%H-%M-%S")
         file_name = path / f"{env_name}-sm{smooth}-{time_now}.pdf"
         plt.savefig(file_name, bbox_inches='tight')
-    # plt.show()
 
 
 @hydra.main(
@@ -366,7 +345,7 @@ def main(cfg: DictConfig):
 
         plots_one_row = 3
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
-        plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
+        plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, cfg, smooth, save_plot, plot_path)
 
 
 if __name__ == "__main__":

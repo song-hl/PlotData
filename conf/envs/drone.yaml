@@ -3,3 +3,5 @@ drone:
   metric_key: 'eval_average_episode_rewards'
   mat: ["Flock_RPM", "Flock_PID", "LeaderFollower_RPM", "LeaderFollower_PID"]
   mappo: ["Flock_PID", "LeaderFollower_PID", "Flock_RPM"]
+  xlabel: Environment steps
+  ylabel: Episode Reward

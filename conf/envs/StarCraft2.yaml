@@ -3,3 +3,5 @@ StarCraft2:
   metric_key: 'eval_win_rate'
   mat: ["1c3s5z", "3s_vs_5z", "5m_vs_6m", "3s5z_vs_3s6z", "10m_vs_11m"]
   mappo: ["1c3s5z", "10m_vs_11m", "mmm2"]
+  xlabel: Environment steps
+  ylabel: Win Rate
