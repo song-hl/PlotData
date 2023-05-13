@@ -1,5 +1,5 @@
 defaults:
-    - scenarios:
+    - envs:
         - StarCraft2
         - drone
         - mujoco
@@ -12,7 +12,7 @@ env_name: drone
 
 store : True                        # 是否存储数据
 save_path : './data'                # 数据存储路径
-step_lenth : None                   # 数据横坐标长度
+step_lenth : 0                      # 数据横坐标长度
 save_plot : True                    # 是否存储图片
 plot_path : './plot_result'         # 图片存储路径
 plot_all: False                     # 是否绘制所有图像
@@ -23,8 +23,10 @@ Algo_Set:
     mat: ['MAT', 'MAT_mar', 'MAT_jpr']
     mappo: ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr']
     all: ['MAPPO', 'MAPPO_mar', 'MAPPO_jpr', 'MAT', 'MAT_mar', 'MAT_jpr']
+use_sub_name: True
+algo_sub: {'MAT_mar': 'MA2CL', 'MAT_jpr': 'MAJOR' , 'MAPPO_mar': 'MAPPO+MA2CL' , 'MAPPPO_jpr': 'MAPPO+MAJOR'}
 
-_scenarios: ${scenarios.${env_name}.${algo}}    #地图
+scenarios: ${envs.${env_name}.${algo}}          #地图
 skip_scenarios: ['walker_3x2','half_3x2']       #跳过的地图
 algo_set: ${Algo_Set.${algo}}                   #算法
 smooth_dic: ${smooth.${algo}}                   #平滑参数
@@ -36,6 +38,12 @@ color:                                          #颜色
     cls: 9
     index: [0,6,7]
 
+data:
+    step: ${envs.${env_name}.step}
+    metric_key: ${envs.${env_name}.metric_key}
+    local_step: Environment steps
+    local_metric_key: Reward
+    smooth_metric_key: Smooth_Reward
 
 hydra:
     job:

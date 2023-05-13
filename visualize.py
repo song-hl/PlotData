@@ -40,7 +40,7 @@ def export_run_name():
     all_df.to_csv(project_config)
 
 
-def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='./', smooth=1, smooth_method=2, step_lenth=None):
+def get_df_from_wandb(env, env_name, scenario, Algo_set, cfg, store=True, save_path='./', smooth=1, smooth_method=2, step_lenth=None):
     df_list = []
     # print(f" - scenario:{scenario}")
 
@@ -48,11 +48,11 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
     file_log_name = 'file_list.txt'
     file_log_path = Path(save_path) / env_name / scenario / file_log_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name / scenario / file_log_name
     file_list = {}
-    if file_log_path.exists():
+    if file_log_path.exists():                                  # 以前下载过数据
         with open(file_log_path, 'r') as f:
             for line in f.readlines():
-                wdrun_id = line.strip('\n').split('\t')[0]
-                wdrun_name = line.strip('\n').split('\t')[1]
+                wdrun_id = line.strip('\n').split('\t')[0]      # wandb run id
+                wdrun_name = line.strip('\n').split('\t')[1]    # wandb run data store path
                 file_list[wdrun_id] = wdrun_name
     else:
         file_list = {}
@@ -68,32 +68,21 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
                 data_path = file_list[run_name]
                 history = pd.read_csv(data_path)
                 history["algorithm"] = algo
-                metric_key = "Reward"
             else:
                 run = api.run(run_name)
                 if run.state != "finished":
                     continue
                 config = {k: v for k, v in run.config.items() if not k.startswith("_")}
                 # print(f"   --- {run.name}")
-                if config["env_name"] == "mujoco":
-                    metric_key = (
-                        "eval_average_episode_rewards"
-                        if algo == "HAPPO"
-                        else "faulty_node_-1/eval_average_episode_rewards"
-                    )
-                elif config["env_name"] == "drone":
-                    metric_key = "eval_average_episode_rewards"
-                elif config["env_name"] == "football":
-                    metric_key = "eval_average_episode_scores"
-                else:
-                    metric_key = "eval_win_rate"
-                # history1 = run.scan_history(keys=["_step", metric_key])
-                history = run.history(samples=2000).dropna()[["_step", metric_key]]
+
+                history = run.history(samples=2000).dropna()[[cfg.data.step, cfg.data.metric_key]]
                 history["algorithm"] = algo
                 history["seed"] = config["seed"]
-                history["Environment steps"] = history["_step"]
-                history["Reward"] = history[metric_key]
-                indicator = "Reward"
+
+                history[cfg.data.local_step] = history[cfg.data.step]
+                history[cfg.data.local_metric_key] = history[cfg.data.metric_key]
+                indicator = cfg.data.local_metric_key
+
                 # store the data
                 if store == True:
                     save_path = Path(save_path) if Path(save_path).is_absolute() else Path.cwd() / save_path
@@ -106,38 +95,36 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, store=True, save_path='
                     with open(file_log_path, 'a') as f:
                         f.write(run_name + '\t' + str(file_name) + '\n')
 
-            # algo name
-            if algo == "MAT_jpr":
-                history["algorithm"] = "MAJOR"
-            elif algo == "MAT_mar":
-                history["algorithm"] = "MA2CL"
-            elif algo == "MAPPO_jpr":
-                history["algorithm"] = "MAPPO+MAJOR"
-            elif algo == "MAPPO_mar":
-                history["algorithm"] = "MAPPO+MA2CL"
+            # algo name substitue
+            # t = cfg.algo_sub[algo]
+            if cfg.use_sub_name and cfg.algo_sub.get(algo,None) is not None:
+                history["algorithm"] = cfg.algo_sub[algo]
 
             # smooth the data
-            if smooth_method == 1 and smooth > 1:
-                history["Smooth_Reward"] = history[metric_key].rolling(smooth, min_periods=1).mean()
-                indicator = "Smooth_Reward"
-            elif smooth_method == 2 and smooth > 1:
+            # if smooth > 1:
+            #     history["Smooth_Reward"] = history[metric_key].rolling(smooth, min_periods=1).mean()
+            #     indicator = "Smooth_Reward"
+
+            if smooth > 1:
                 y = np.ones(smooth)
-                x = np.asarray(history["Reward"])  # (200, 1)
+                x = np.asarray(history[cfg.data.local_metric_key])  # (200, 1)
                 x = np.squeeze(x)  # (200,)
                 z = np.ones(len(x))
                 smoothed_x = np.convolve(x, y, 'same') / np.convolve(z, y, 'same')
-                history["Smooth_Reward"] = smoothed_x
-                indicator = "Smooth_Reward"
+                history[cfg.data.smooth_metric_key] = smoothed_x
+                indicator = cfg.data.smooth_metric_key
             else:
-                indicator = "Reward"
+                indicator = cfg.data.local_metric_key
             curve_list.append(history)
+
         data = pd.concat(curve_list)
         data.reset_index(drop=True, inplace=True)
         df_list.append(data)
+
     df = pd.concat(df_list)
     df.reset_index(drop=True, inplace=True)
-    if step_lenth is not None:
-        df = df[df["_step"] < step_lenth]
+    if step_lenth != 0:
+        df = df[df[cfg.data.step] < step_lenth]
     return df, indicator
 
 
@@ -338,41 +325,14 @@ def main(cfg: DictConfig):
     if cfg.plot_all:
         scenarios = [key for key in env.keys()]
     else:
-        scenarios = cfg._scenarios
+        scenarios = cfg.scenarios
     hue_name = cfg.hue_name
     FLAG_NUM = 3
     Algo_set = cfg.algo_set
     
-    # mappo_smooth_dic = defaultdict(lambda: 2)
-    # mappo_smooth_dic = {'ant_4x2': 6, '8x1-Agent Ant': 4, 'walker_6x1': 4, 'walker_3x2': 4,
-    #                     "3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-    #                     "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
-    #                     "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
-    #                     }
-    # mat_smooth_dic = defaultdict(lambda: 2)
-    # mat_smooth_dic = {"3s_vs_5z": 1, "mmm": 1, "3s5z": 2, "1c3s5z": 1, "8m_vs_9m": 1, "5m_vs_6m": 3, "10m_vs_11m": 2, "3s5z_vs_3s6z": 2,
-    #                   "LeaderFollower_PID": 1, "Flock_PID": 1, "LeaderFollower_RPM": 1, "LeaderFollower_PID": 1,
-    #                   "academy_pass_and_shoot_with_keeper": 1, "academy_counterattack_easy": 1, "academy_3_vs_1_with_keeper": 1,
-    #                   }
-    # smooth_dic = mappo_smooth_dic if 'MAPPO' in Algo_set[0] else mat_smooth_dic
     smooth_dic = cfg.smooth_dic
     color_config = cfg.color
-    
-    # if len(Algo_set) == 3:
-    #     colors = [
-    #         sns.color_palette("husl", 9)[0],
-    #         sns.color_palette("husl", 9)[6],
-    #         sns.color_palette("husl", 9)[7],
-    #     ]
-    # elif len(Algo_set) == 6:
-    #     colors = [
-    #         sns.color_palette("husl", 9)[0],  # SOTA
-    #         sns.color_palette("husl", 9)[1],
-    #         sns.color_palette("husl", 9)[6],  # MAPPO / MAT (baseline)
-    #         sns.color_palette("husl", 9)[7],
-    #         sns.color_palette("husl", 9)[5],
-    #         sns.color_palette("husl", 9)[3],
-        # ]
+
     colors = [sns.color_palette(color_config.palette, color_config.cls)[i] for i in color_config.index]
 
     if FLAG_NUM == 1:
@@ -399,31 +359,11 @@ def main(cfg: DictConfig):
             if scenario in cfg.skip_scenarios:
                 continue
             print(f"env: {scenario}")
-            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, cfg, store, save_path, smooth, smooth_method, step_lenth)
             df_list.append(df)
             indicator_list.append(indicator)
             map_name.append(scenario)
 
-        # for scenario in scenarios:
-        #     if scenario == 'walker_3x2' or scenario == 'half_3x2':
-        #         continue
-        #     smooth = smooth_dic.get(scenario, 2)
-        #     print(f"env: {scenario}")
-        #     df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set2, store, save_path, smooth, smooth_method, step_lenth)
-        #     df_list.append(df)
-        #     indicator_list.append(indicator)
-        #     map_name.append(scenario)
-
-        # PLOT SIX ALGORTHM
-        # for scenario in scenarios:
-        #     if scenario == 'walker_3x2' or scenario == 'half_3x2':
-        #         continue
-        #     smooth = smooth_dic.get(scenario, 2)
-        #     print(f"env: {scenario}")
-        #     df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
-        #     df_list.append(df)
-        #     indicator_list.append(indicator)
-        #     map_name.append(scenario)
         plots_one_row = 3
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
         plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, smooth, save_plot, plot_path)
