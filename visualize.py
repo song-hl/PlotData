@@ -40,8 +40,12 @@ def export_run_name():
     all_df.to_csv(project_config)
 
 
-def get_df_from_wandb(env, env_name, scenario, Algo_set, cfg, store=True, save_path='./', smooth=1, smooth_method=2, step_lenth=None):
+def get_df_from_wandb(env, scenario, cfg, smooth):
     df_list = []
+    env_name = cfg.env_name
+    Algo_set = cfg.algo_set
+    save_path = cfg.save_path
+
     # print(f" - scenario:{scenario}")
 
     # 读取本地数据列表
@@ -84,7 +88,7 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, cfg, store=True, save_p
                 indicator = cfg.data.local_metric_key
 
                 # store the data
-                if store == True:
+                if cfg.store == True:
                     save_path = Path(save_path) if Path(save_path).is_absolute() else Path.cwd() / save_path
                     env_name = run.config['env_name']
                     if env_name is not None:
@@ -123,8 +127,8 @@ def get_df_from_wandb(env, env_name, scenario, Algo_set, cfg, store=True, save_p
 
     df = pd.concat(df_list)
     df.reset_index(drop=True, inplace=True)
-    if step_lenth != 0:
-        df = df[df[cfg.data.step] < step_lenth]
+    if cfg.step_lenth != 0:
+        df = df[df[cfg.data.step] < cfg.step_lenth]
     return df, indicator
 
 
@@ -198,7 +202,9 @@ def plot_one_scenario(df, indicator, hue_name, env_name, scenario, colors, smoot
     # plt.show()
 
 
-def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes, colors, nsize, cfg, smooth=1, save=False, save_path='./plot_result'):
+def plot_multi_scenario(df_list, indicator_list, colors, nsize, cfg):
+    env_name = cfg.env_name
+    scenarioes = cfg.scenarios
     assert nsize[0] * nsize[1] >= len(scenarioes)
     # 设置图的风格
     sns.set_theme(
@@ -272,11 +278,13 @@ def plot_multi_scenario(df_list, indicator_list, hue_name, env_name, scenarioes,
 
     fig.legend(loc='lower center', ncol=6, handles=main_lines, labels=main_labels, labelspacing=0.1, fontsize=font_size, bbox_to_anchor=anchor, )
 
-    if save == True:
+    # 保存图片
+    if cfg.save_plot == True:
+        save_path = cfg.save_path
         path = Path(save_path) / env_name if Path(save_path).is_absolute() else Path.cwd() / save_path / env_name
         path.mkdir(parents=True, exist_ok=True)
         time_now = datetime.now().strftime("%m-%d-%H-%M-%S")
-        file_name = path / f"{env_name}-sm{smooth}-{time_now}.pdf"
+        file_name = path / f"{env_name}-{time_now}.pdf"
         plt.savefig(file_name, bbox_inches='tight')
 
 
@@ -307,6 +315,7 @@ def main(cfg: DictConfig):
         scenarios = cfg.scenarios
     hue_name = cfg.hue_name
     FLAG_NUM = 3
+    figure_type = cfg.figure_type
     Algo_set = cfg.algo_set
     
     smooth_dic = cfg.smooth_dic
@@ -314,21 +323,24 @@ def main(cfg: DictConfig):
 
     colors = [sns.color_palette(color_config.palette, color_config.cls)[i] for i in color_config.index]
 
-    if FLAG_NUM == 1:
-        # 只画一个图
-        scenario = '5m_vs_6m'
-        print(f"env: {env_name}")
-        smooth = smooth_dic.get(scenario, 2)
-        df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
-        plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
-    if FLAG_NUM == 2:
+    # if FLAG_NUM == 1:
+    #     # 只画一个图
+    #     scenario = '5m_vs_6m'
+    #     print(f"env: {env_name}")
+    #     smooth = smooth_dic.get(scenario, 2)
+    #     df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+    #     plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
+    if figure_type == 'MFOP':
         # 画多个单图
         for scenario in scenarios:
-            print(f"env: {scenario}")
             smooth = smooth_dic.get(scenario, 2)
-            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, store, save_path, smooth, smooth_method, step_lenth)
+            if scenario in cfg.skip_scenarios:
+                continue
+            print(f"env: {scenario}")
+            df, indicator = get_df_from_wandb(env, scenario, cfg, smooth)
             plot_one_scenario(df, indicator, env_name, hue_name, scenario, colors, smooth, save_plot, plot_path)
-    if FLAG_NUM == 3:
+    # if figure_type == 'OFMP':
+    else:
         # 画一个多图
         df_list = []
         indicator_list = []
@@ -338,14 +350,14 @@ def main(cfg: DictConfig):
             if scenario in cfg.skip_scenarios:
                 continue
             print(f"env: {scenario}")
-            df, indicator = get_df_from_wandb(env, env_name, scenario, Algo_set, cfg, store, save_path, smooth, smooth_method, step_lenth)
+            df, indicator = get_df_from_wandb(env, scenario, cfg, smooth)
             df_list.append(df)
             indicator_list.append(indicator)
             map_name.append(scenario)
 
         plots_one_row = 3
         nsize = (ceil(len(map_name) / plots_one_row), plots_one_row)
-        plot_multi_scenario(df_list, indicator_list, hue_name, env_name, map_name, colors, nsize, cfg, smooth, save_plot, plot_path)
+        plot_multi_scenario(df_list, indicator_list, colors, nsize, cfg)
 
 
 if __name__ == "__main__":
